@@ -1,19 +1,6 @@
-/*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.github.edgar615.db;
 
+import com.github.edgar615.jdbc.JdbcUtils;
 import com.github.edgar615.util.base.Randoms;
 import com.github.edgar615.util.base.StringUtils;
 import com.github.edgar615.util.search.Example;
@@ -34,7 +21,7 @@ import org.junit.Test;
  *
  * @author Edgar  Date 2017/5/18
  */
-public class SqlBuilderTest {
+public class JdbcUtilsTest {
 
   @Test
   public void testInsert() {
@@ -42,7 +29,7 @@ public class SqlBuilderTest {
     Device device = new Device();
     device.setBarcode("barcode");
     device.setCompanyCode(0);
-    SQLBindings sqlBindings = SqlBuilder.insert(device);
+    SQLBindings sqlBindings = JdbcUtils.insert(device);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("insert into device(barcode,company_code) values(?,?)", sqlBindings.sql());
@@ -57,7 +44,7 @@ public class SqlBuilderTest {
     Device device = new Device();
     device.setBarcode("barcode");
     device.setCompanyCode(0);
-    SQLBindings sqlBindings = SqlBuilder.fullInsertSql(device);
+    SQLBindings sqlBindings = JdbcUtils.fullInsertSql(device);
     String expected = "insert into device(device_id,user_id,parent_id,username,is_virtual,company_code,name,barcode,mac_address,encrypt_key,type,state,location,device_code,manufacturer_code,manufacturer_name,description,product_version,zigbee_version,zigbee_mac_address,main_feature,wifi_firm,wifi_version,server_address,public_ip,is_online,add_on,created_on) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     Assert.assertEquals(expected, sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
@@ -67,7 +54,7 @@ public class SqlBuilderTest {
 
   @Test
   public void testDeleteById() {
-    SQLBindings sqlBindings = SqlBuilder.deleteById(Device.class, 1);
+    SQLBindings sqlBindings = JdbcUtils.deleteById(Device.class, 1);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("delete from device where device_id = ?", sqlBindings.sql());
@@ -79,7 +66,7 @@ public class SqlBuilderTest {
   public void testDeleteByExample() {
     Example example = Example.create()
         .isNull("macAddress");
-    SQLBindings sqlBindings = SqlBuilder.deleteByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.deleteByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("delete from device where mac_address is null",
@@ -92,10 +79,10 @@ public class SqlBuilderTest {
     Device device = new Device();
     device.setBarcode("barcode");
     device.setCompanyCode(0);
-    SQLBindings sqlBindings = SqlBuilder.updateById(device, null, null, 1);
+    SQLBindings sqlBindings = JdbcUtils.updateById(device, null, null, 1);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
-    Assert.assertEquals("update device set barcode = ?,company_code = ? where device_id = ?",
+    Assert.assertEquals("update device add barcode = ?,company_code = ? where device_id = ?",
         sqlBindings.sql());
     Assert.assertEquals("barcode", sqlBindings.bindings().get(0));
     Assert.assertEquals(0, sqlBindings.bindings().get(1));
@@ -110,11 +97,11 @@ public class SqlBuilderTest {
     Map<String, Number> addOrSub = ImmutableMap.of("parentId", 1, "deviceCode", -2,
         "type", new BigDecimal("1.0"), "addOn", new BigDecimal("-1.1"));
     List<String> fiedls = Lists.newArrayList("manufacturerName");
-    SQLBindings sqlBindings = SqlBuilder.updateById(device, addOrSub, fiedls, 1);
+    SQLBindings sqlBindings = JdbcUtils.updateById(device, addOrSub, fiedls, 1);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals(
-        "update device set barcode = ?,company_code = ?,parent_id = parent_id + 1,device_code = device_code - 2,type = type + 1.0,add_on = add_on - 1.1,manufacturer_name = null where device_id = ?",
+        "update device add barcode = ?,company_code = ?,parent_id = parent_id + 1,device_code = device_code - 2,type = type + 1.0,add_on = add_on - 1.1,manufacturer_name = null where device_id = ?",
         sqlBindings.sql());
     Assert.assertEquals("barcode", sqlBindings.bindings().get(0));
     Assert.assertEquals(0, sqlBindings.bindings().get(1));
@@ -124,13 +111,13 @@ public class SqlBuilderTest {
   @Test
   public void testUpdateEmptyShouldFailed() {
     Device device = new Device();
-    SQLBindings sqlBindings = SqlBuilder.updateById(device, null, null, 1);
+    SQLBindings sqlBindings = JdbcUtils.updateById(device, null, null, 1);
     Assert.assertNull(sqlBindings);
   }
 
   @Test
   public void testFindById() {
-    SQLBindings sqlBindings = SqlBuilder.findById(Device.class, 1);
+    SQLBindings sqlBindings = JdbcUtils.findById(Device.class, 1);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("select " + allColumn() + " from device where device_id = ?",
@@ -144,7 +131,7 @@ public class SqlBuilderTest {
     fields.add("deviceId");
     fields.add("companyCode");
     fields.add(Randoms.randomAlphabet(20));
-    SQLBindings sqlBindings = SqlBuilder.findById(Device.class, 1, fields);
+    SQLBindings sqlBindings = JdbcUtils.findById(Device.class, 1, fields);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("select device_id, company_code from device where device_id = ?",
@@ -154,11 +141,11 @@ public class SqlBuilderTest {
 
   @Test
   public void testSetNull() {
-    SQLBindings sqlBindings = SqlBuilder.updateById(new Device(), Maps.newHashMap(),
+    SQLBindings sqlBindings = JdbcUtils.updateById(new Device(), Maps.newHashMap(),
         Lists.newArrayList("abc", "userId", "parentId"), 1);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
-    Assert.assertEquals("update device set user_id = null,parent_id = null where device_id = ?",
+    Assert.assertEquals("update device add user_id = null,parent_id = null where device_id = ?",
         sqlBindings.sql());
     Assert.assertEquals(1, sqlBindings.bindings().get(0));
   }
@@ -169,7 +156,7 @@ public class SqlBuilderTest {
         .startsWith("macAddress", "FFFF")
         .regexp("macAddress", "^F")
         .desc("userId");
-    SQLBindings sqlBindings = SqlBuilder.findByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.findByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("select " + allColumn()
@@ -184,7 +171,7 @@ public class SqlBuilderTest {
         .startsWith("macAddress", "FFFF")
         .desc("userId")
         .withDistinct();
-    SQLBindings sqlBindings = SqlBuilder.findByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.findByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("select distinct " + allColumn()
@@ -202,7 +189,7 @@ public class SqlBuilderTest {
     Example example = Example.create().in("type", Lists.newArrayList(1, 2, 3))
         .startsWith("macAddress", "FFFF");
     example.addFields(fields);
-    SQLBindings sqlBindings = SqlBuilder.findByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.findByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals(
@@ -221,7 +208,7 @@ public class SqlBuilderTest {
         .startsWith("macAddress", "FFFF")
         .withDistinct();
     example.addFields(fields);
-    SQLBindings sqlBindings = SqlBuilder.findByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.findByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals(
@@ -237,7 +224,7 @@ public class SqlBuilderTest {
     Example example = Example.create().in("type", Lists.newArrayList(1, 2, 3))
         .startsWith("macAddress", "FFFF");
     example.addFields(fields);
-    SQLBindings sqlBindings = SqlBuilder.findByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.findByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals(
@@ -254,7 +241,7 @@ public class SqlBuilderTest {
     fields.add(Randoms.randomAlphabet(20));
     Example example = Example.create().in("type", Lists.newArrayList(1, 2, 3))
         .startsWith("macAddress", "FFFF");
-    SQLBindings sqlBindings = SqlBuilder.findByExample(Device.class, example, 5, 10);
+    SQLBindings sqlBindings = JdbcUtils.findByExample(Device.class, example, 5, 10);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("select " + allColumn()
@@ -273,7 +260,7 @@ public class SqlBuilderTest {
         .startsWith("macAddress", "FFFF")
         .asc("userId")
         .addFields(fields);
-    SQLBindings sqlBindings = SqlBuilder.countByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.countByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals("select count(*) from device where type in (?,?,?) and mac_address like ?",
@@ -292,7 +279,7 @@ public class SqlBuilderTest {
         .asc("userId")
         .addFields(fields)
         .withDistinct();
-    SQLBindings sqlBindings = SqlBuilder.countByExample(Device.class, example);
+    SQLBindings sqlBindings = JdbcUtils.countByExample(Device.class, example);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals(
