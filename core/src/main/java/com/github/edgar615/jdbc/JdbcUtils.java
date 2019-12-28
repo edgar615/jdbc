@@ -128,10 +128,10 @@ public class JdbcUtils {
                                                  Example example, boolean onlyPrimaryKey, long offset, long limit) {
         SQLBindings sqlBindings = findByExample(elementType, example, onlyPrimaryKey);
         StringBuilder sql = new StringBuilder(sqlBindings.sql());
-        sql.append(" limit ?, ?");
+        SQLBindings limitSql = LimitBuilder.limitAndOffset(limit, offset).build();
+        sql.append(limitSql.sql());
         List<Object> args = new ArrayList<>(sqlBindings.bindings());
-        args.add(offset);
-        args.add(limit);
+        args.addAll(limitSql.bindings());
         return SQLBindings.create(sql.toString(), args);
     }
 
@@ -307,7 +307,7 @@ public class JdbcUtils {
 
     public static <ID> SQLBindings insert(Persistent<ID> persistent) {
         String tableName = underscoreName(persistent.getClass().getSimpleName());
-        InsertBuilder insertBuilder = new InsertBuilder(tableName);
+        InsertBuilder insertBuilder = InsertBuilder.create(tableName);
         PersistentKit kit = createKit(persistent.getClass());
         Map<String, Object> map = new TreeMap<>();
         kit.toMap(persistent, map);
@@ -329,7 +329,7 @@ public class JdbcUtils {
      */
     public static <ID> SQLBindings fullInsertSql(Persistent<ID> persistent) {
         String tableName = underscoreName(persistent.getClass().getSimpleName());
-        InsertBuilder insertBuilder = new InsertBuilder(tableName);
+        InsertBuilder insertBuilder = InsertBuilder.create(tableName);
         PersistentKit kit = createKit(persistent.getClass());
         Map<String, Object> map = new HashMap<>();
         kit.toMap(persistent, map);

@@ -9,15 +9,19 @@ public class LimitBuilder implements ISqlBuilder {
 
     private static final String LIMIT = " limit ";
 
-    private final int limit;
+    private final long limit;
 
-    private final int offset;
+    private final long offset;
 
-    public LimitBuilder(int limit) {
-        this(limit, 0);
+    public static LimitBuilder limit(long limit) {
+        return new LimitBuilder(limit, 0);
     }
 
-    public LimitBuilder(int limit, int offset) {
+    public static LimitBuilder limitAndOffset(long limit, long offset) {
+        return new LimitBuilder(limit, offset);
+    }
+
+    private LimitBuilder(long limit, long offset) {
         this.limit = limit;
         this.offset = offset;
     }

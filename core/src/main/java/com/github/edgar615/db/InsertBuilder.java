@@ -16,10 +16,13 @@ public class InsertBuilder implements ISqlBuilder {
 
     private List<Object> values = new ArrayList<>();
 
-    public InsertBuilder(String table) {
+    private InsertBuilder(String table) {
         this.table = table;
     }
 
+    public static InsertBuilder create(String table) {
+        return new InsertBuilder(table);
+    }
     public InsertBuilder add(String column, Object value) {
         columns.add(column);
         values.add(value);
