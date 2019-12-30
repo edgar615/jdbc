@@ -1,6 +1,8 @@
-package com.github.edgar615.db;
+package com.github.edgar615.sql;
 
 import com.google.common.collect.Lists;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,8 +33,8 @@ public class SelectBuilderTest {
     SQLBindings sqlBindings = selectBuilder.build();
     Assert.assertEquals("select * from device limit ?, ?", sqlBindings.sql());
     Assert.assertEquals(2, sqlBindings.bindings().size());
-    Assert.assertEquals(10L, sqlBindings.bindings().get(0));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(1));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(0));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(1));
   }
 
   @Test
@@ -44,8 +46,8 @@ public class SelectBuilderTest {
     Assert.assertEquals("select * from device where device_id = ? limit ?, ?", sqlBindings.sql());
     Assert.assertEquals(3, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(1));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(2));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(1));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(2));
   }
 
   @Test
@@ -61,8 +63,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(2));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(2));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
   }
 
   @Test
@@ -77,8 +79,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(2));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(2));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
   }
 
   @Test
@@ -96,8 +98,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
     Assert.assertEquals("000E%", sqlBindings.bindings().get(2));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
   }
 
   @Test
@@ -115,8 +117,8 @@ public class SelectBuilderTest {
     Assert.assertEquals("000F%", sqlBindings.bindings().get(0));
     Assert.assertEquals(1L, sqlBindings.bindings().get(1));
     Assert.assertEquals("000E%", sqlBindings.bindings().get(2));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
   }
 
   @Test
@@ -136,8 +138,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(2));
     Assert.assertEquals("000E%", sqlBindings.bindings().get(3));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(5));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(5));
   }
 
   @Test
@@ -157,8 +159,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(2));
     Assert.assertEquals("000E%", sqlBindings.bindings().get(3));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(5));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(5));
   }
 
   @Test
@@ -178,8 +180,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(2));
     Assert.assertEquals("000E%", sqlBindings.bindings().get(3));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(5));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(5));
   }
 
   @Test
@@ -202,8 +204,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(2));
     Assert.assertEquals("000E%", sqlBindings.bindings().get(3));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(5));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(5));
   }
 
   @Test
@@ -225,8 +227,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(2));
     Assert.assertEquals("000E%", sqlBindings.bindings().get(3));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(5));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(5));
   }
 
   @Test
@@ -243,8 +245,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(2));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(2));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
   }
 
   @Test
@@ -263,8 +265,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
     Assert.assertEquals(5, sqlBindings.bindings().get(2));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
   }
 
   @Test
@@ -285,8 +287,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
     Assert.assertEquals(5, sqlBindings.bindings().get(2));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(4));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(4));
   }
 
   @Test
@@ -336,8 +338,8 @@ public class SelectBuilderTest {
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
-    Assert.assertEquals(10L, sqlBindings.bindings().get(2));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(2));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
   }
 
   @Test
@@ -356,7 +358,26 @@ public class SelectBuilderTest {
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(2));
+    Assert.assertEquals(10L, sqlBindings.bindings().get(3));
+  }
+
+
+  @Test
+  public void testCondition() {
+    Map<String, Object> params = new HashMap<>();
+    params.put("deviceId", 1L);
+    SelectBuilder selectBuilder = SelectBuilder.create("device")
+        .limit(10, 5)
+        .and(Predicates.equalsTo("device_id", params.get("deviceId")), Conditions.notNull(params.get("deviceId")))
+        .and(Predicates.startWith("mac_address", "000F"), Conditions.notNull(params.get("macAddress")));
+    SQLBindings sqlBindings = selectBuilder.build();
+    Assert
+        .assertEquals("select * from device where device_id = ? limit ?, ?",
+            sqlBindings.sql());
+    Assert.assertEquals(3, sqlBindings.bindings().size());
+    Assert.assertEquals(1L, sqlBindings.bindings().get(0));
+    Assert.assertEquals(5L, sqlBindings.bindings().get(1));
     Assert.assertEquals(10L, sqlBindings.bindings().get(2));
-    Assert.assertEquals(5L, sqlBindings.bindings().get(3));
   }
 }

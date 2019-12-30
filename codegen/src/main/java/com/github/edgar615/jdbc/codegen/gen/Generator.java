@@ -56,16 +56,16 @@ public class Generator {
           }
         });
     codegen.addImport("com.google.common.base.MoreObjects");
-    codegen.addImport("com.github.edgar615.util.db.Persistent");
-    codegen.addImport("com.github.edgar615.util.db.PrimaryKey");
+    codegen.addImport("com.github.edgar615.util.sql.Persistent");
+    codegen.addImport("com.github.edgar615.util.sql.PrimaryKey");
     boolean containsVersion = table.getColumns().stream()
         .filter(c -> !c.isIgnore())
         .anyMatch(c -> c.isVersion());
     if (containsVersion) {
-      codegen.addImport("com.github.edgar615.util.db.VersionKey");
+      codegen.addImport("com.github.edgar615.util.sql.VersionKey");
     }
     if (table.getContainsVirtual()) {
-      codegen.addImport("com.github.edgar615.util.db.VirtualKey");
+      codegen.addImport("com.github.edgar615.util.sql.VirtualKey");
     }
     codegen.genCode(table);
   }
@@ -90,7 +90,7 @@ public class Generator {
     codegen.addImport("java.util.List");
     codegen.addImport("java.util.Map");
     codegen.addImport("com.google.common.collect.Lists");
-    codegen.addImport("com.github.edgar615.util.db.PersistentKit");
+    codegen.addImport("com.github.edgar615.util.sql.PersistentKit");
     codegen.genCode(table);
   }
 
@@ -107,7 +107,7 @@ public class Generator {
     Codegen daoGen = new Codegen(this.options.getSrcFolderPath(),
         this.options.getDaoOptions().getDaoPackage(), "Dao", daoTplFile);
     daoGen.addVariable("domainPackage", this.options.getDomainPackage());
-    daoGen.addImport("com.github.edgar615.util.db.BaseDao");
+    daoGen.addImport("com.github.edgar615.util.sql.BaseDao");
     if (!this.options.getDomainPackage().equals(this.options.getDaoOptions().getDaoPackage())) {
       daoGen.addImport(this.options.getDomainPackage() + "." + table.getUpperCamelName());
     }
@@ -122,8 +122,8 @@ public class Generator {
     daoImplGen.addVariable("daoPackage", this.options.getDaoOptions().getDaoPackage());
     daoImplGen.addVariable("domainPackage", this.options.getDomainPackage());
     daoImplGen.addVariable("supportSpring", this.options.getDaoOptions().isSupportSpring());
-    daoImplGen.addImport("com.github.edgar615.util.db.BaseDaoImpl")
-        .addImport("com.github.edgar615.util.db.Jdbc");
+    daoImplGen.addImport("com.github.edgar615.util.sql.BaseDaoImpl")
+        .addImport("com.github.edgar615.util.sql.Jdbc");
 
     if (!this.options.getDomainPackage().equals(daoImplPackage)) {
       daoImplGen.addImport(this.options.getDomainPackage() + "." + table.getUpperCamelName());

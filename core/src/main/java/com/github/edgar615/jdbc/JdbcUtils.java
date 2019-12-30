@@ -1,14 +1,14 @@
 package com.github.edgar615.jdbc;
 
-import com.github.edgar615.db.ClauseBuilder;
-import com.github.edgar615.db.DeleteBuilder;
-import com.github.edgar615.db.InsertBuilder;
-import com.github.edgar615.db.LimitBuilder;
-import com.github.edgar615.db.Predicate;
-import com.github.edgar615.db.Predicates;
-import com.github.edgar615.db.SQLBindings;
-import com.github.edgar615.db.SelectBuilder;
-import com.github.edgar615.db.UpdateBuilder;
+import com.github.edgar615.sql.ClauseBuilder;
+import com.github.edgar615.sql.DeleteBuilder;
+import com.github.edgar615.sql.InsertBuilder;
+import com.github.edgar615.sql.LimitBuilder;
+import com.github.edgar615.sql.Predicate;
+import com.github.edgar615.sql.Predicates;
+import com.github.edgar615.sql.SQLBindings;
+import com.github.edgar615.sql.SelectBuilder;
+import com.github.edgar615.sql.UpdateBuilder;
 import com.github.edgar615.util.base.StringUtils;
 import com.github.edgar615.util.search.Criterion;
 import com.github.edgar615.util.search.Example;

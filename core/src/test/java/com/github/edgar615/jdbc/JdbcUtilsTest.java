@@ -1,6 +1,6 @@
-package com.github.edgar615.db;
+package com.github.edgar615.jdbc;
 
-import com.github.edgar615.jdbc.JdbcUtils;
+import com.github.edgar615.sql.SQLBindings;
 import com.github.edgar615.util.base.Randoms;
 import com.github.edgar615.util.base.StringUtils;
 import com.github.edgar615.util.search.Example;

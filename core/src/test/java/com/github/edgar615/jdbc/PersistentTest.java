@@ -1,4 +1,4 @@
-package com.github.edgar615.db;
+package com.github.edgar615.jdbc;
 
 import org.junit.Assert;
 import org.junit.Test;

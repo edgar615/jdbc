@@ -1,12 +1,12 @@
-package com.github.edgar615.db;
+package com.github.edgar615.sql;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AndPredicate implements Predicate {
+public class OrPredicate implements Predicate {
 
-  private static final String joiner = " and ";
+  private static final String joiner = " or ";
   private final List<Predicate> predicates = new ArrayList<>();
 
   @Override
@@ -20,7 +20,7 @@ public class AndPredicate implements Predicate {
     return Predicates.join(joiner, predicates);
   }
 
-  public AndPredicate add(Predicate predicate) {
+  public OrPredicate add(Predicate predicate) {
     this.predicates.add(predicate);
     return this;
   }

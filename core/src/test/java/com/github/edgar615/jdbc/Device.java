@@ -1,4 +1,4 @@
-package com.github.edgar615.db;
+package com.github.edgar615.jdbc;
 
 import com.github.edgar615.jdbc.Persistent;
 import com.google.common.base.MoreObjects;

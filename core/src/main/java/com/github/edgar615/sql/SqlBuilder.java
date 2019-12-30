@@ -1,4 +1,4 @@
-package com.github.edgar615.db;
+package com.github.edgar615.sql;
 
 public interface SqlBuilder {
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 基础DAO
@@ -39,6 +40,15 @@ public interface BaseDao<ID, T extends Persistent<ID>> {
    */
   void batchInsert(List<T> persistentList);
 
+
+  /**
+   * 批量插入
+   *
+   * @param persistentList 持久化对象的集合
+   * @param batchSize 每次处理的记录数量
+   */
+  void batchInsert(List<T> persistentList, int batchSize);
+
   /**
    * 根据主键删除.
    *
@@ -46,6 +56,14 @@ public interface BaseDao<ID, T extends Persistent<ID>> {
    * @return 删除记录数
    */
   int deleteById(ID id);
+
+  /**
+   * 根据主键列表，迭代调用deleteById删除记录，用于简化部分业务代码。<b>这个方法不是用<code>id in (...)</code>或者batch来删除.</b>
+   *
+   * @param idList 主键列表
+   * @return 删除记录数
+   */
+  int deleteByIdList(List<ID> idList);
 
   /**
    * 根据条件删除.
@@ -67,6 +85,19 @@ public interface BaseDao<ID, T extends Persistent<ID>> {
   int updateById(T persistent, Map<String, Number> addOrSub,
       List<String> nullFields,
       ID id);
+
+  /**
+   * 根据主键列表更新，忽略实体中的null,迭代调用单个主键删除记录，用于简化部分业务代码。<b>这个方法不是用<code>id in (...)</code>或者batch来更新.</b>
+   *
+   * @param persistent 持久化对象
+   * @param addOrSub 需要做增加或者减去的字段，value为正数表示增加，负数表示减少
+   * @param nullFields 需要设为null的字段
+   * @param idList 主键的列表
+   * @return 修改记录数
+   */
+  int updateById(T persistent, Map<String, Number> addOrSub,
+      List<String> nullFields,
+      List<ID> idList);
 
   /**
    * 根据条件更新，忽略实体中的null
@@ -124,6 +155,17 @@ public interface BaseDao<ID, T extends Persistent<ID>> {
    */
   default int updateById(T persistent, ID id) {
     return updateById(persistent, new HashMap<>(), new ArrayList<>(), id);
+  }
+
+  /**
+   * 根据主键列表，迭代调用updateById删除记录，用于简化部分业务代码。<b>这个方法不是用<code>id in (...)</code>或者batch来更新.</b>
+   *
+   * @param persistent 持久化对象
+   * @param idList 主键列表
+   * @return 修改记录数
+   */
+  default int updateById(T persistent, List<ID> idList) {
+    return updateById(persistent, new HashMap<>(), new ArrayList<>(), idList);
   }
 
   /**
@@ -188,6 +230,34 @@ public interface BaseDao<ID, T extends Persistent<ID>> {
    */
   default T findById(ID id) {
     return findById(id, Lists.newArrayList());
+  }
+
+
+  /**
+   * 根据主键列表，迭代调用findById查找，用于简化部分业务代码.
+   *
+   * @param idList 主键列表
+   * @return 持久化对象，如果根据主键未找到数据，不返回null
+   */
+  default List<T> findByIdList(List<ID> idList) {
+    return idList.stream()
+        .map(id -> findById(id))
+        .filter(record -> record != null)
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * 根据主键列表，迭代调用findById查找，用于简化部分业务代码.
+   *
+   * @param idList 主键列表
+   * @param fields 返回的属性列表
+   * @return 持久化对象，如果根据主键未找到数据，不返回null
+   */
+  default List<T> findByIdList(List<ID> idList, List<String> fields) {
+    return idList.stream()
+        .map(id -> findById(id, fields))
+        .filter(record -> record != null)
+        .collect(Collectors.toList());
   }
 
   /**

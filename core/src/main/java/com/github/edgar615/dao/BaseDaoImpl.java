@@ -37,8 +37,22 @@ public class BaseDaoImpl<ID, T extends Persistent<ID>> implements BaseDao<ID, T>
   }
 
   @Override
+  public void batchInsert(List<T> persistentList, int batchSize) {
+    jdbc.batchInsert(persistentList, batchSize);
+  }
+
+  @Override
   public int deleteById(ID id) {
     return jdbc.deleteById(elementType, id);
+  }
+
+  @Override
+  public int deleteByIdList(List<ID> idList) {
+    int rows = 0;
+    for (ID id : idList) {
+      rows += deleteById(id);
+    }
+    return rows;
   }
 
   @Override
@@ -50,6 +64,16 @@ public class BaseDaoImpl<ID, T extends Persistent<ID>> implements BaseDao<ID, T>
   public int updateById(T persistent, Map<String, Number> addOrSub, List<String> nullFields,
       ID id) {
     return jdbc.updateById(persistent, addOrSub, nullFields, id);
+  }
+
+  @Override
+  public int updateById(T persistent, Map<String, Number> addOrSub, List<String> nullFields,
+      List<ID> idList) {
+    int rows = 0;
+    for (ID id : idList) {
+      rows += updateById(persistent, addOrSub, nullFields, id);
+    }
+    return rows;
   }
 
   @Override

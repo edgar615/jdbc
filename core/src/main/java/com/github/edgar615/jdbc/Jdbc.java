@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 数据访问层的接口.
@@ -147,6 +146,7 @@ public interface Jdbc {
    * 批量插入，如果超过了batchSize，会拆分多次执行
    *
    * @param persistentList 持久化对象的集合
+   * @param batchSize 每次处理的记录数量
    * @param <ID> 主键列席
    * @param <T> 持久化对象
    */
@@ -154,54 +154,10 @@ public interface Jdbc {
     int start = 0;
     while (start >= persistentList.size()) {
       int len = Math.min(batchSize, persistentList.size() - start);
-      persistentList.subList(start, len);
+      batchInsert(persistentList.subList(start, len));
       start += len;
     }
   }
-
-  ;
-
-  /**
-   * 根据主键列表，迭代调用deleteById删除记录，用于简化部分业务代码。<b>这个方法不是用<code>id in (...)</code>或者batch来删除.</b>
-   *
-   * @param elementType 持久化对象
-   * @param idList 主键列表
-   * @param <ID> 主键类型
-   * @param <T> 持久化对象
-   * @return 删除记录数
-   */
-  default <ID, T extends Persistent<ID>> int deleteByIdList(Class<T> elementType, List<ID> idList) {
-    int rows = 0;
-    for (ID id : idList) {
-      rows += deleteById(elementType, id);
-    }
-    return rows;
-  }
-
-//    /**
-//     * 根据条件删除.对于大量数据的删除可能耗时较长，拆分按ID单独删除
-//     *
-//     * @param elementType 持久化对象
-//     * @param example     查询条件
-//     * @param <ID>        主键类型
-//     * @param <T>         持久化对象
-//     * @return 删除记录数
-//     */
-//    default <ID, T extends Persistent<ID>> int deleteLargeRowByExample(Class<T> elementType, Example example, int batchSize) {
-//        int start = 0;
-//        int limit = batchSize;
-//        int deleteRows = 0;
-//        while(true) {
-//            List<T> rows = findByExample(elementType, example, start, limit);
-//            if (rows.isEmpty()) {
-//                break;
-//            }
-//            List<ID> idList = rows.stream().map(row -> row.id()).collect(Collectors.toList());
-//            deleteByIdList(elementType, idList);
-//            start += rows.size();
-//        }
-//        return deleteRows;
-//    }
 
   /**
    * 根据主键更新，忽略实体中的null.
@@ -213,22 +169,6 @@ public interface Jdbc {
    */
   default <ID> int updateById(Persistent<ID> persistent, ID id) {
     return updateById(persistent, new HashMap<>(), new ArrayList<>(), id);
-  }
-
-  /**
-   * 根据主键列表，迭代调用updateById删除记录，用于简化部分业务代码。<b>这个方法不是用<code>id in (...)</code>或者batch来更新.</b>
-   *
-   * @param persistent 持久化对象
-   * @param idList 主键列表
-   * @param <ID> 主键类型
-   * @return 修改记录数
-   */
-  default <ID> int updateById(Persistent<ID> persistent, List<ID> idList) {
-    int rows = 0;
-    for (ID id : idList) {
-      rows += updateById(persistent, id);
-    }
-    return rows;
   }
 
   /**
@@ -322,41 +262,6 @@ public interface Jdbc {
    */
   default <ID, T extends Persistent<ID>> T findById(Class<T> elementType, ID id) {
     return findById(elementType, id, Lists.newArrayList());
-  }
-
-  /**
-   * 根据主键列表，迭代调用findById查找，用于简化部分业务代码.
-   *
-   * @param elementType 持久化对象
-   * @param idList 主键列表
-   * @param <ID> 主键类型
-   * @param <T> 持久化对象
-   * @return 持久化对象，如果根据主键未找到数据，不返回null
-   */
-  default <ID, T extends Persistent<ID>> List<T> findByIdList(Class<T> elementType,
-      List<ID> idList) {
-    return idList.stream()
-        .map(id -> findById(elementType, id, Lists.newArrayList()))
-        .filter(record -> record != null)
-        .collect(Collectors.toList());
-  }
-
-  /**
-   * 根据主键列表，迭代调用findById查找，用于简化部分业务代码.
-   *
-   * @param elementType 持久化对象
-   * @param idList 主键列表
-   * @param fields 返回的属性列表
-   * @param <ID> 主键类型
-   * @param <T> 持久化对象
-   * @return 持久化对象，如果根据主键未找到数据，不返回null
-   */
-  default <ID, T extends Persistent<ID>> List<T> findByIdList(Class<T> elementType, List<ID> idList,
-      List<String> fields) {
-    return idList.stream()
-        .map(id -> findById(elementType, id, fields))
-        .filter(record -> record != null)
-        .collect(Collectors.toList());
   }
 
   /**

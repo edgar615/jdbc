@@ -110,7 +110,7 @@ public class DBFetcher {
         try {
           conn.close();
         } catch (Exception e) {
-          LOGGER.warn("Error closing db connection.{}", e);
+          LOGGER.warn("Error closing sql connection.{}", e);
         }
       }
     }

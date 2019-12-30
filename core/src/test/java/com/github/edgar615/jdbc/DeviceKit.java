@@ -1,6 +1,5 @@
-package com.github.edgar615.db;
+package com.github.edgar615.jdbc;
 
-import com.github.edgar615.jdbc.PersistentKit;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;

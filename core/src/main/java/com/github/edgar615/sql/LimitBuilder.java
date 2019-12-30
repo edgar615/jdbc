@@ -1,4 +1,4 @@
-package com.github.edgar615.db;
+package com.github.edgar615.sql;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
@@ -22,13 +22,15 @@ public class LimitBuilder implements SqlBuilder {
     if (limit <= 0) {
       return SQLBindings.create("", Lists.newArrayList());
     }
+    StringBuilder stringBuilder = new StringBuilder(LIMIT);
     List<Object> args = new ArrayList<>();
-    StringBuilder stringBuilder = new StringBuilder(LIMIT)
-        .append("?");
-    args.add(limit);
-    if (offset > 0) {
-      stringBuilder.append(", ?");
+    if (offset <= 0) {
+      stringBuilder.append("?");
+      args.add(limit);
+    } else {
+      stringBuilder.append("?, ?");
       args.add(offset);
+      args.add(limit);
     }
     return SQLBindings.create(stringBuilder.toString(), args);
   }

@@ -1,4 +1,4 @@
-package com.github.edgar615.db;
+package com.github.edgar615.sql;
 
 import com.google.common.base.Joiner;
 import java.util.ArrayList;
@@ -32,9 +32,23 @@ public class SelectBuilder extends ClauseBuilder implements SqlBuilder {
     return this;
   }
 
+  public SelectBuilder and(Predicate predicate, PredicateCondition condition) {
+    if (condition.apply()) {
+      and(predicate);
+    }
+    return this;
+  }
+
   @Override
   public SelectBuilder or(Predicate predicate) {
     super.or(predicate);
+    return this;
+  }
+
+  public SelectBuilder or(Predicate predicate, PredicateCondition condition) {
+    if (condition.apply()) {
+      or(predicate);
+    }
     return this;
   }
 
