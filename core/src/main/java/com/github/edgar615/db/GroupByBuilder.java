@@ -14,6 +14,16 @@ public class GroupByBuilder implements SqlBuilder {
   private GroupByBuilder() {
   }
 
+  @Override
+  public SQLBindings build() {
+    if (groupByList.isEmpty()) {
+      return SQLBindings.create("", Lists.newArrayList());
+    }
+    StringBuilder sql = new StringBuilder(GROUP_BY)
+        .append(Joiner.on(",").join(groupByList));
+    return SQLBindings.create(sql.toString(), Lists.newArrayList());
+  }
+
   public static GroupByBuilder create() {
     return new GroupByBuilder();
   }
@@ -35,15 +45,5 @@ public class GroupByBuilder implements SqlBuilder {
   public GroupByBuilder add(String column) {
     groupByList.add(column);
     return this;
-  }
-
-  @Override
-  public SQLBindings build() {
-    if (groupByList.isEmpty()) {
-      return SQLBindings.create("", Lists.newArrayList());
-    }
-    StringBuilder sql = new StringBuilder(GROUP_BY)
-        .append(Joiner.on(",").join(groupByList));
-    return SQLBindings.create(sql.toString(), Lists.newArrayList());
   }
 }

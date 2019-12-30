@@ -90,9 +90,8 @@ public class HelperSource {
       return options.inverse(this);
     }
     Column column = (Column) v1;
-    return " #{persistent." +column.getLowerCamelName() + "}";
+    return " #{persistent." + column.getLowerCamelName() + "}";
   }
-
 
 
   public CharSequence mapperXmlInsertValues(Object v1, Options options) throws IOException {
@@ -103,7 +102,7 @@ public class HelperSource {
     List<String> fields = columns.stream()
         .filter(c -> !c.isIgnore())
         .map(c -> c.getLowerCamelName())
-        .map(s -> "#{" +s + "}")
+        .map(s -> "#{" + s + "}")
         .collect(Collectors.toList());
     return Joiner.on(",").join(fields);
   }

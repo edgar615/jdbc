@@ -1,7 +1,6 @@
 package com.github.edgar615.jdbc.codegen.test;
 
 import com.github.edgar615.jdbc.codegen.gen.CodegenOptions;
-import com.github.edgar615.jdbc.codegen.gen.DaoOptions;
 import com.github.edgar615.jdbc.codegen.gen.Generator;
 import com.github.edgar615.jdbc.codegen.gen.MybatisOptions;
 
@@ -26,7 +25,9 @@ public class FetchDataFromTest {
         .setDomainPackage("com.github.edgar615.util.mybatis")
 //        .setDaoOptions(new DaoOptions().setGenImpl(false).setDaoPackage("com.github.edgar615.test.codegen.dao")
 //        .setSupportSpring(true))
-        .setMybatisOptions(new MybatisOptions().setMapperClassPackage("com.github.edgar615.util.mybatis").setXmlFolderPath("src/test/resources/mapper"));
+        .setMybatisOptions(
+            new MybatisOptions().setMapperClassPackage("com.github.edgar615.util.mybatis")
+                .setXmlFolderPath("src/test/resources/mapper"));
 
     new Generator(options).generate();
 

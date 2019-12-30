@@ -42,18 +42,6 @@ import org.slf4j.LoggerFactory;
  */
 class Codegen {
 
-  private String commentStart =
-      "/* START Do not remove/edit this line. CodeGenerator "
-          + "will preserve any code between start and end tags.*/";
-
-  private String commentEnd =
-      "/* END Do not remove/edit this line. CodeGenerator will "
-          + "preserve any code between start and end tags.*/";
-
-  private String isCommentStart = "/* START";
-
-  private String isCommentEnd = "/* END";
-
   private static final Handlebars handlebars = new Handlebars();
   private static final Logger LOGGER = LoggerFactory.getLogger(Generator.class);
 
@@ -80,7 +68,8 @@ class Codegen {
     handlebars.registerHelper("serialVersionUID", new Helper<String>() {
       @Override
       public Object apply(String str, Options options) throws IOException {
-        return Hashing.farmHashFingerprint64().hashString(str, Charset.defaultCharset()).padToLong() + "L";
+        return Hashing.farmHashFingerprint64().hashString(str, Charset.defaultCharset()).padToLong()
+            + "L";
       }
     });
     handlebars.registerHelpers(new HelperSource());
@@ -93,6 +82,14 @@ class Codegen {
   private final String tpl;
   private final String tplFile;
   private final Map<String, Object> variables = new HashMap<>();
+  private String commentStart =
+      "/* START Do not remove/edit this line. CodeGenerator "
+          + "will preserve any code between start and end tags.*/";
+  private String commentEnd =
+      "/* END Do not remove/edit this line. CodeGenerator will "
+          + "preserve any code between start and end tags.*/";
+  private String isCommentStart = "/* START";
+  private String isCommentEnd = "/* END";
   private String fileType = ".java";
 
   Codegen(String srcFolderPath, String packageName, String suffix,
@@ -136,21 +133,6 @@ class Codegen {
     return this;
   }
 
-  public Codegen addVariable(String name, Object value) {
-    this.variables.put(name, value);
-    return this;
-  }
-
-  public Codegen addVariables(Map<String, Object> variables) {
-    this.variables.putAll(variables);
-    return this;
-  }
-
-  public Codegen addImport(String imp) {
-    this.imports.add(imp);
-    return this;
-  }
-
   public void setCommentStart(String commentStart) {
     this.commentStart = commentStart;
   }
@@ -165,6 +147,21 @@ class Codegen {
 
   public void setIsCommentEnd(String isCommentEnd) {
     this.isCommentEnd = isCommentEnd;
+  }
+
+  public Codegen addVariable(String name, Object value) {
+    this.variables.put(name, value);
+    return this;
+  }
+
+  public Codegen addVariables(Map<String, Object> variables) {
+    this.variables.putAll(variables);
+    return this;
+  }
+
+  public Codegen addImport(String imp) {
+    this.imports.add(imp);
+    return this;
   }
 
   public void genCode(Table table) {

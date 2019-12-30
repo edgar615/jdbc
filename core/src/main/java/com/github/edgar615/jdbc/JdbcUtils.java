@@ -4,7 +4,6 @@ import com.github.edgar615.db.ClauseBuilder;
 import com.github.edgar615.db.DeleteBuilder;
 import com.github.edgar615.db.InsertBuilder;
 import com.github.edgar615.db.LimitBuilder;
-import com.github.edgar615.db.OrderByBuilder;
 import com.github.edgar615.db.Predicate;
 import com.github.edgar615.db.Predicates;
 import com.github.edgar615.db.SQLBindings;

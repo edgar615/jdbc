@@ -1,7 +1,6 @@
 package com.github.edgar615.db;
 
 import com.google.common.collect.Lists;
-import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,7 +55,9 @@ public class SelectBuilderTest {
         .and(Predicates.equalsTo("device_id", 1L))
         .and(Predicates.startWith("mac_address", "000F"));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where device_id = ? and mac_address like ? limit ?, ?", sqlBindings.sql());
+    Assert
+        .assertEquals("select * from device where device_id = ? and mac_address like ? limit ?, ?",
+            sqlBindings.sql());
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
@@ -71,7 +72,8 @@ public class SelectBuilderTest {
         .and(Predicates.equalsTo("device_id", 1L))
         .or(Predicates.startWith("mac_address", "000F"));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where device_id = ? or mac_address like ? limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals("select * from device where device_id = ? or mac_address like ? limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
@@ -84,9 +86,12 @@ public class SelectBuilderTest {
     SelectBuilder selectBuilder = SelectBuilder.create("device")
         .limit(10, 5)
         .and(Predicates.equalsTo("device_id", 1L))
-        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),Predicates.startWith("mac_address", "000E")));
+        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),
+            Predicates.startWith("mac_address", "000E")));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where device_id = ? and ( mac_address like ? or mac_address like ? ) limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device where device_id = ? and ( mac_address like ? or mac_address like ? ) limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(5, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
@@ -100,9 +105,12 @@ public class SelectBuilderTest {
     SelectBuilder selectBuilder = SelectBuilder.create("device")
         .limit(10, 5)
         .and(Predicates.startWith("mac_address", "000F"))
-        .or(Predicates.and(Predicates.equalsTo("device_id", 1L),Predicates.startWith("mac_address", "000E")));
+        .or(Predicates.and(Predicates.equalsTo("device_id", 1L),
+            Predicates.startWith("mac_address", "000E")));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where mac_address like ? or ( device_id = ? and mac_address like ? ) limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device where mac_address like ? or ( device_id = ? and mac_address like ? ) limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(5, sqlBindings.bindings().size());
     Assert.assertEquals("000F%", sqlBindings.bindings().get(0));
     Assert.assertEquals(1L, sqlBindings.bindings().get(1));
@@ -115,10 +123,14 @@ public class SelectBuilderTest {
   public void testTowAndTowOr() {
     SelectBuilder selectBuilder = SelectBuilder.create("device")
         .limit(10, 5)
-        .and(Predicates.or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
-        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),Predicates.startWith("mac_address", "000E")));
+        .and(Predicates
+            .or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
+        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),
+            Predicates.startWith("mac_address", "000E")));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(6, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
@@ -132,10 +144,14 @@ public class SelectBuilderTest {
   public void testTableAlias() {
     SelectBuilder selectBuilder = SelectBuilder.create("device d")
         .limit(10, 5)
-        .and(Predicates.or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
-        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),Predicates.startWith("mac_address", "000E")));
+        .and(Predicates
+            .or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
+        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),
+            Predicates.startWith("mac_address", "000E")));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device d where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device d where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(6, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
@@ -149,10 +165,14 @@ public class SelectBuilderTest {
   public void testAlias() {
     SelectBuilder selectBuilder = SelectBuilder.create("device")
         .limit(10, 5)
-        .and(Predicates.or(Predicates.equalsTo("d.device_id", 1L), Predicates.equalsTo("d.device_id", 8L)))
-        .and(Predicates.or(Predicates.startWith("d.mac_address", "000F"),Predicates.startWith("d.mac_address", "000E")));
+        .and(Predicates
+            .or(Predicates.equalsTo("d.device_id", 1L), Predicates.equalsTo("d.device_id", 8L)))
+        .and(Predicates.or(Predicates.startWith("d.mac_address", "000F"),
+            Predicates.startWith("d.mac_address", "000E")));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where ( d.device_id = ? or d.device_id = ? ) and ( d.mac_address like ? or d.mac_address like ? ) limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device where ( d.device_id = ? or d.device_id = ? ) and ( d.mac_address like ? or d.mac_address like ? ) limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(6, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
@@ -169,10 +189,14 @@ public class SelectBuilderTest {
         .column("mac_address, owner_id as o")
         .column("min(add_on) as min_add_on")
         .limit(10, 5)
-        .and(Predicates.or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
-        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),Predicates.startWith("mac_address", "000E")));
+        .and(Predicates
+            .or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
+        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),
+            Predicates.startWith("mac_address", "000E")));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select device_id, mac_address, owner_id as o, min(add_on) as min_add_on from device where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select device_id, mac_address, owner_id as o, min(add_on) as min_add_on from device where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(6, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
@@ -186,12 +210,16 @@ public class SelectBuilderTest {
   public void testDistinct() {
     SelectBuilder selectBuilder = SelectBuilder.create("device")
         .limit(10, 5)
-        .and(Predicates.or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
-        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),Predicates.startWith("mac_address", "000E")))
+        .and(Predicates
+            .or(Predicates.equalsTo("device_id", 1L), Predicates.equalsTo("device_id", 8L)))
+        .and(Predicates.or(Predicates.startWith("mac_address", "000F"),
+            Predicates.startWith("mac_address", "000E")))
         .distinct()
         .forUpdate();
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select distinct * from device where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ? for update", sqlBindings.sql());
+    Assert.assertEquals(
+        "select distinct * from device where ( device_id = ? or device_id = ? ) and ( mac_address like ? or mac_address like ? ) limit ?, ? for update",
+        sqlBindings.sql());
     Assert.assertEquals(6, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals(8L, sqlBindings.bindings().get(1));
@@ -209,7 +237,9 @@ public class SelectBuilderTest {
         .and(Predicates.startWith("mac_address", "000F"))
         .groupBy("owner_id");
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where device_id = ? and mac_address like ? group by owner_id limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device where device_id = ? and mac_address like ? group by owner_id limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
@@ -226,7 +256,9 @@ public class SelectBuilderTest {
         .groupBy("owner_id")
         .having(Predicates.greaterThan("count(device_id)", 5));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where device_id = ? and mac_address like ? group by owner_id having count(device_id) > ? limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device where device_id = ? and mac_address like ? group by owner_id having count(device_id) > ? limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(5, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
@@ -246,7 +278,9 @@ public class SelectBuilderTest {
         .asc("device_id")
         .desc("device_count");
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device where device_id = ? and mac_address like ? group by owner_id having count(device_id) > ? order by device_id asc, device_count desc limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device where device_id = ? and mac_address like ? group by owner_id having count(device_id) > ? order by device_id asc, device_count desc limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(5, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
@@ -275,12 +309,14 @@ public class SelectBuilderTest {
         .and(Predicates.contains("mac_address", "45"))
         .and(Predicates.likeExpr("mac_address", "%0086%"))
         .and(Predicates.regexp("mac_address", "ef"))
-        .and(Predicates.in("device_id", Lists.newArrayList(1L,2L,3L,4L)))
-        .and(Predicates.notIn("device_id", Lists.newArrayList(100L,90L)))
+        .and(Predicates.in("device_id", Lists.newArrayList(1L, 2L, 3L, 4L)))
+        .and(Predicates.notIn("device_id", Lists.newArrayList(100L, 90L)))
         .and(Predicates.isNotNull("mac_address"))
         .and(Predicates.isNull("encrypt_key"));
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device d where device_id = ? and device_id <> ? and device_id <> shop_id and device_id < ? and device_id < part_id and device_id > ? and device_id > part_id and device_id <= shop_id and add_on <= ? and device_id >= owner_id and update_on >= ? and mac_address like ? and mac_address like ? and mac_address like ? and mac_address like %0086% and mac_address regexp ? and device_id in (?,?,?,?) and device_id not in (?,?) and mac_address is not null and encrypt_key is null limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device d where device_id = ? and device_id <> ? and device_id <> shop_id and device_id < ? and device_id < part_id and device_id > ? and device_id > part_id and device_id <= shop_id and add_on <= ? and device_id >= owner_id and update_on >= ? and mac_address like ? and mac_address like ? and mac_address like ? and mac_address like %0086% and mac_address regexp ? and device_id in (?,?,?,?) and device_id not in (?,?) and mac_address is not null and encrypt_key is null limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(18, sqlBindings.bindings().size());
   }
 
@@ -294,7 +330,9 @@ public class SelectBuilderTest {
         .join("company c on d.company_id = c.company_id")
         .asc("device_id");
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device d join user u on d.owner_id = u.user_id join company c on d.company_id = c.company_id where device_id = ? and mac_address like ? order by device_id asc limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device d join user u on d.owner_id = u.user_id join company c on d.company_id = c.company_id where device_id = ? and mac_address like ? order by device_id asc limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));
@@ -312,7 +350,9 @@ public class SelectBuilderTest {
         .leftJoin("company c on d.company_id = c.company_id")
         .asc("device_id");
     SQLBindings sqlBindings = selectBuilder.build();
-    Assert.assertEquals("select * from device d left join user u on d.owner_id = u.user_id left join company c on d.company_id = c.company_id where device_id = ? and mac_address like ? order by device_id asc limit ?, ?", sqlBindings.sql());
+    Assert.assertEquals(
+        "select * from device d left join user u on d.owner_id = u.user_id left join company c on d.company_id = c.company_id where device_id = ? and mac_address like ? order by device_id asc limit ?, ?",
+        sqlBindings.sql());
     Assert.assertEquals(4, sqlBindings.bindings().size());
     Assert.assertEquals(1L, sqlBindings.bindings().get(0));
     Assert.assertEquals("000F%", sqlBindings.bindings().get(1));

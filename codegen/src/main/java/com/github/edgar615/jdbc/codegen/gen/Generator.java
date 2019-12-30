@@ -141,7 +141,8 @@ public class Generator {
     Codegen codegen;
     if (this.options.getMybatisOptions().isCacheWildcardEvict()) {
       codegen = new Codegen(this.options.getSrcFolderPath(),
-          this.options.getMybatisOptions().getMapperClassPackage(), "Mapper", wildcardEvictCacheMapperTplFile);
+          this.options.getMybatisOptions().getMapperClassPackage(), "Mapper",
+          wildcardEvictCacheMapperTplFile);
     } else {
       codegen = new Codegen(this.options.getSrcFolderPath(),
           this.options.getMybatisOptions().getMapperClassPackage(), "Mapper", mapperTplFile);
@@ -157,7 +158,8 @@ public class Generator {
     codegen.addImport("org.springframework.cache.annotation.CacheEvict");
     codegen.addImport("org.springframework.cache.annotation.Cacheable");
     codegen.addVariable("domainPackage", this.options.getDomainPackage());
-    if (!this.options.getDomainPackage().equals(this.options.getMybatisOptions().getMapperClassPackage())) {
+    if (!this.options.getDomainPackage()
+        .equals(this.options.getMybatisOptions().getMapperClassPackage())) {
       codegen.addImport(this.options.getDomainPackage() + "." + table.getUpperCamelName());
     }
     codegen.genCode(table);
@@ -170,8 +172,10 @@ public class Generator {
     codegen.addVariable("mapperPackage", this.options.getMybatisOptions().getMapperClassPackage());
     codegen.addVariable("mapperSuffix", "Mapper");
     codegen.setFileType(".xml");
-    codegen.setCommentStart("<!-- START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags. -->");
-    codegen.setCommentEnd("<!-- END Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.-->");
+    codegen.setCommentStart(
+        "<!-- START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags. -->");
+    codegen.setCommentEnd(
+        "<!-- END Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.-->");
     codegen.setIsCommentStart("<!-- START ");
     codegen.setIsCommentEnd("<!-- END ");
     codegen.genCode(table);

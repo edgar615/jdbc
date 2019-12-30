@@ -183,118 +183,6 @@ public class Device implements Persistent<Integer> {
    */
   private Date createdOn;
 
-  public Integer setDeviceId(Integer deviceId) {
-    return this.deviceId = deviceId;
-  }
-
-  public Integer setUserId(Integer userId) {
-    return this.userId = userId;
-  }
-
-  public Integer setParentId(Integer parentId) {
-    return this.parentId = parentId;
-  }
-
-  public String setUsername(String username) {
-    return this.username = username;
-  }
-
-  public Integer setIsVirtual(Integer isVirtual) {
-    return this.isVirtual = isVirtual;
-  }
-
-  public Integer setCompanyCode(Integer companyCode) {
-    return this.companyCode = companyCode;
-  }
-
-  public String setName(String name) {
-    return this.name = name;
-  }
-
-  public String setBarcode(String barcode) {
-    return this.barcode = barcode;
-  }
-
-  public String setMacAddress(String macAddress) {
-    return this.macAddress = macAddress;
-  }
-
-  public String setEncryptKey(String encryptKey) {
-    return this.encryptKey = encryptKey;
-  }
-
-  public Integer setType(Integer type) {
-    return this.type = type;
-  }
-
-  public Integer setState(Integer state) {
-    return this.state = state;
-  }
-
-  public String setLocation(String location) {
-    return this.location = location;
-  }
-
-  public Integer setDeviceCode(Integer deviceCode) {
-    return this.deviceCode = deviceCode;
-  }
-
-  public Integer setManufacturerCode(Integer manufacturerCode) {
-    return this.manufacturerCode = manufacturerCode;
-  }
-
-  public String setManufacturerName(String manufacturerName) {
-    return this.manufacturerName = manufacturerName;
-  }
-
-  public String setDescription(String description) {
-    return this.description = description;
-  }
-
-  public String setProductVersion(String productVersion) {
-    return this.productVersion = productVersion;
-  }
-
-  public String setZigbeeVersion(String zigbeeVersion) {
-    return this.zigbeeVersion = zigbeeVersion;
-  }
-
-  public String setZigbeeMacAddress(String zigbeeMacAddress) {
-    return this.zigbeeMacAddress = zigbeeMacAddress;
-  }
-
-  public String setMainFeature(String mainFeature) {
-    return this.mainFeature = mainFeature;
-  }
-
-  public Integer setWifiFirm(Integer wifiFirm) {
-    return this.wifiFirm = wifiFirm;
-  }
-
-  public String setWifiVersion(String wifiVersion) {
-    return this.wifiVersion = wifiVersion;
-  }
-
-  public String setServerAddress(String serverAddress) {
-    return this.serverAddress = serverAddress;
-  }
-
-  public String setPublicIp(String publicIp) {
-    return this.publicIp = publicIp;
-  }
-
-  public Integer setIsOnline(Integer isOnline) {
-    return this.isOnline = isOnline;
-  }
-
-  public Integer setAddOn(Integer addOn) {
-    return this.addOn = addOn;
-  }
-
-  public Date setCreatedOn(Date createdOn) {
-    return this.createdOn = createdOn;
-  }
-
   @Override
   public String toString() {
     return MoreObjects.toStringHelper("Company")
@@ -332,6 +220,16 @@ public class Device implements Persistent<Integer> {
   @Override
   public Integer id() {
     return deviceId;
+  }
+
+  @Override
+  public void setId(Integer id) {
+    this.deviceId = id;
+  }
+
+  @Override
+  public void setGeneratedKey(Number key) {
+    this.deviceId = key.intValue();
   }
 
   public Integer getDeviceId() {
@@ -446,14 +344,116 @@ public class Device implements Persistent<Integer> {
     return createdOn;
   }
 
-  @Override
-  public void setId(Integer id) {
-    this.deviceId = id;
+  public Integer setDeviceId(Integer deviceId) {
+    return this.deviceId = deviceId;
   }
 
-  @Override
-  public void setGeneratedKey(Number key) {
-    this.deviceId = key.intValue();
+  public Integer setUserId(Integer userId) {
+    return this.userId = userId;
+  }
+
+  public Integer setParentId(Integer parentId) {
+    return this.parentId = parentId;
+  }
+
+  public String setUsername(String username) {
+    return this.username = username;
+  }
+
+  public Integer setIsVirtual(Integer isVirtual) {
+    return this.isVirtual = isVirtual;
+  }
+
+  public Integer setCompanyCode(Integer companyCode) {
+    return this.companyCode = companyCode;
+  }
+
+  public String setName(String name) {
+    return this.name = name;
+  }
+
+  public String setBarcode(String barcode) {
+    return this.barcode = barcode;
+  }
+
+  public String setMacAddress(String macAddress) {
+    return this.macAddress = macAddress;
+  }
+
+  public String setEncryptKey(String encryptKey) {
+    return this.encryptKey = encryptKey;
+  }
+
+  public Integer setType(Integer type) {
+    return this.type = type;
+  }
+
+  public Integer setState(Integer state) {
+    return this.state = state;
+  }
+
+  public String setLocation(String location) {
+    return this.location = location;
+  }
+
+  public Integer setDeviceCode(Integer deviceCode) {
+    return this.deviceCode = deviceCode;
+  }
+
+  public Integer setManufacturerCode(Integer manufacturerCode) {
+    return this.manufacturerCode = manufacturerCode;
+  }
+
+  public String setManufacturerName(String manufacturerName) {
+    return this.manufacturerName = manufacturerName;
+  }
+
+  public String setDescription(String description) {
+    return this.description = description;
+  }
+
+  public String setProductVersion(String productVersion) {
+    return this.productVersion = productVersion;
+  }
+
+  public String setZigbeeVersion(String zigbeeVersion) {
+    return this.zigbeeVersion = zigbeeVersion;
+  }
+
+  public String setZigbeeMacAddress(String zigbeeMacAddress) {
+    return this.zigbeeMacAddress = zigbeeMacAddress;
+  }
+
+  public String setMainFeature(String mainFeature) {
+    return this.mainFeature = mainFeature;
+  }
+
+  public Integer setWifiFirm(Integer wifiFirm) {
+    return this.wifiFirm = wifiFirm;
+  }
+
+  public String setWifiVersion(String wifiVersion) {
+    return this.wifiVersion = wifiVersion;
+  }
+
+  public String setServerAddress(String serverAddress) {
+    return this.serverAddress = serverAddress;
+  }
+
+  public String setPublicIp(String publicIp) {
+    return this.publicIp = publicIp;
+  }
+
+  public Integer setIsOnline(Integer isOnline) {
+    return this.isOnline = isOnline;
+  }
+
+  public Integer setAddOn(Integer addOn) {
+    return this.addOn = addOn;
+  }
+
+  public Date setCreatedOn(Date createdOn) {
+    return this.createdOn = createdOn;
   }
 
   /* START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.*/

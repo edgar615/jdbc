@@ -1,7 +1,5 @@
 package com.github.edgar615.db;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.junit.Assert;
 import org.junit.Test;
 

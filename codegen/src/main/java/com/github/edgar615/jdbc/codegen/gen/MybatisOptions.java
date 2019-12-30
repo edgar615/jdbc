@@ -25,17 +25,17 @@ public class MybatisOptions {
     return mapperClassPackage;
   }
 
+  public MybatisOptions setMapperClassPackage(String mapperClassPackage) {
+    this.mapperClassPackage = mapperClassPackage;
+    return this;
+  }
+
   public String getXmlFolderPath() {
     return xmlFolderPath;
   }
 
   public MybatisOptions setXmlFolderPath(String xmlFolderPath) {
     this.xmlFolderPath = xmlFolderPath;
-    return this;
-  }
-
-  public MybatisOptions setMapperClassPackage(String mapperClassPackage) {
-    this.mapperClassPackage = mapperClassPackage;
     return this;
   }
 

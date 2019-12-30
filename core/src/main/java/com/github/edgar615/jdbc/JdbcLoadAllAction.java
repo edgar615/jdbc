@@ -8,17 +8,13 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * 从数据库中加载数据的工具类,这个工具类会一直执行，直到load方法返回null或者空
- * Builder必须传入下列参数：
- * jdbc
- * elementType 实体的class
- * example 默认的查询条件，不应该带排序功能，因为这个工具类会用主键生序排列，如果增加了排序，会导致加载的数据不一致.
- * limit 每次加载的数量
- * consumer 加载到数据之后的处理类
+ * 从数据库中加载数据的工具类,这个工具类会一直执行，直到load方法返回null或者空 Builder必须传入下列参数： jdbc elementType 实体的class example
+ * 默认的查询条件，不应该带排序功能，因为这个工具类会用主键生序排列，如果增加了排序，会导致加载的数据不一致. limit 每次加载的数量 consumer 加载到数据之后的处理类
  *
  * @author Edgar  Date 2018/5/18
  */
 public class JdbcLoadAllAction<ID, T extends Persistent<ID>> implements LoadAllAction {
+
   private final Jdbc jdbc;
 
   private final Class<T> elementType;
@@ -32,7 +28,7 @@ public class JdbcLoadAllAction<ID, T extends Persistent<ID>> implements LoadAllA
   private PersistentKit<ID, T> kit;
 
   private JdbcLoadAllAction(Jdbc jdbc, Class<T> elementType, Example example, int limit,
-                            Consumer<List<T>> consumer) {
+      Consumer<List<T>> consumer) {
     Objects.requireNonNull(jdbc);
     Objects.requireNonNull(elementType);
     Objects.requireNonNull(example);
@@ -49,42 +45,17 @@ public class JdbcLoadAllAction<ID, T extends Persistent<ID>> implements LoadAllA
     this.consumer = consumer;
   }
 
-  public static <ID, T extends Persistent<ID>> Builder<ID, T> builder() {
-    return new Builder<>();
-  }
-
   @Override
   public void execute() {
     load(null);
   }
 
-  private void load(ID startPk) {
-    Example newExample = Example.create();
-    newExample.addCriteria(example.criteria());
-    newExample.addFields(example.fields());
-    Persistent persistent = newDomain(elementType);
-    if (startPk != null) {
-      newExample.greaterThan(kit.primaryField(), startPk);
-    }
-    newExample.asc(kit.primaryField());
-    List<T> elements = jdbc.findByExample(elementType, newExample, 0, limit);
-    if (elements == null || elements.isEmpty()) {
-      return;
-    }
-    consumer.accept(elements);
-    ID lastPk = elements.get(elements.size() - 1).id();
-    load(lastPk);
-  }
-
-  private <ID> Persistent newDomain(Class<? extends Persistent<ID>> clazz) {
-    try {
-      return clazz.newInstance();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  public static <ID, T extends Persistent<ID>> Builder<ID, T> builder() {
+    return new Builder<>();
   }
 
   public static class Builder<ID, T extends Persistent<ID>> {
+
     private Jdbc jdbc;
 
     private Class<T> elementType;
@@ -122,6 +93,32 @@ public class JdbcLoadAllAction<ID, T extends Persistent<ID>> implements LoadAllA
 
     public JdbcLoadAllAction build() {
       return new JdbcLoadAllAction(jdbc, elementType, example, limit, consumer);
+    }
+  }
+
+  private void load(ID startPk) {
+    Example newExample = Example.create();
+    newExample.addCriteria(example.criteria());
+    newExample.addFields(example.fields());
+    Persistent persistent = newDomain(elementType);
+    if (startPk != null) {
+      newExample.greaterThan(kit.primaryField(), startPk);
+    }
+    newExample.asc(kit.primaryField());
+    List<T> elements = jdbc.findByExample(elementType, newExample, 0, limit);
+    if (elements == null || elements.isEmpty()) {
+      return;
+    }
+    consumer.accept(elements);
+    ID lastPk = elements.get(elements.size() - 1).id();
+    load(lastPk);
+  }
+
+  private <ID> Persistent newDomain(Class<? extends Persistent<ID>> clazz) {
+    try {
+      return clazz.newInstance();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
 }

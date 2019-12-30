@@ -34,6 +34,7 @@ public interface BaseDao<ID, T extends Persistent<ID>> {
 
   /**
    * 批量插入
+   *
    * @param persistentList 持久化对象的集合
    */
   void batchInsert(List<T> persistentList);

@@ -46,6 +46,20 @@ public class CodegenOptions {
 
   private static final boolean DEFAULT_GEN_RULE = false;
   private final Map<String, String> versions = new HashMap<>();
+  //忽略的字段
+  private final List<String> ignoreColumnList = new ArrayList<String>();
+  //使用前缀匹配忽略的表
+  private final List<String> ignoreColumnStartsWithPattern = new ArrayList<String>();
+  //使用后缀匹配忽略的表
+  private final List<String> ignoreColumnEndsWithPattern = new ArrayList<String>();
+  //忽略的表
+  private final List<String> ignoreTableList = new ArrayList<String>();
+  //使用前缀匹配忽略的表
+  private final List<String> ignoreTableStartsWithPattern = new ArrayList<String>();
+  //使用后缀匹配忽略的表
+  private final List<String> ignoreTableEndsWithPattern = new ArrayList<String>();
+  //只生成这些表
+  private final List<String> tableList = new ArrayList<>();
   private String srcFolderPath = DEFAULT_SRC_FOLDER_PATH;
   private String domainPackage = DEFAULT_DOMAIN_PACKAGE;
   private boolean genRule = DEFAULT_GEN_RULE;
@@ -53,28 +67,6 @@ public class CodegenOptions {
   private boolean genDao = false;
   private MybatisOptions mybatisOptions;
   private boolean genMybatis = false;
-
-  //忽略的字段
-  private final List<String> ignoreColumnList = new ArrayList<String>();
-
-  //使用前缀匹配忽略的表
-  private final List<String> ignoreColumnStartsWithPattern = new ArrayList<String>();
-
-  //使用后缀匹配忽略的表
-  private final List<String> ignoreColumnEndsWithPattern = new ArrayList<String>();
-
-  //忽略的表
-  private final List<String> ignoreTableList = new ArrayList<String>();
-
-  //使用前缀匹配忽略的表
-  private final List<String> ignoreTableStartsWithPattern = new ArrayList<String>();
-
-  //使用后缀匹配忽略的表
-  private final List<String> ignoreTableEndsWithPattern = new ArrayList<String>();
-
-  //只生成这些表
-  private final List<String> tableList = new ArrayList<>();
-
   private String ignoreTablesStr = DEFAULT_IGNORE_TABLES;
 
   private String ignoreColumnsStr = DEFAULT_IGNORE_COLUMN;
@@ -94,6 +86,7 @@ public class CodegenOptions {
   private String password = DEFAULT_PASSWORD;
 
   private int loginTimeout = DEFAULT_LOGIN_TIMEOUT;
+
   /**
    * Default constructor
    */
@@ -182,18 +175,8 @@ public class CodegenOptions {
     return this;
   }
 
-  public CodegenOptions addGenTable(String tableName) {
-    this.tableList.add(tableName);
-    return this;
-  }
-
   public List<String> getTableList() {
     return tableList;
-  }
-
-  public CodegenOptions addGenTables(List<String> tableNames) {
-    this.tableList.addAll(tableNames);
-    return this;
   }
 
   public String getIgnoreColumnsStr() {
@@ -239,39 +222,6 @@ public class CodegenOptions {
   public CodegenOptions setPassword(String password) {
     this.password = password;
     return this;
-  }
-
-  protected void setIgnoreTable() {
-    if (!Strings.isNullOrEmpty(ignoreTablesStr)) {
-      StringTokenizer strTok = new StringTokenizer(ignoreTablesStr, ",");
-      while (strTok.hasMoreTokens()) {
-        String token = strTok.nextToken().toLowerCase().trim();
-        if (CharMatcher.anyOf("*").indexIn(token) == 0) {
-          this.ignoreTableEndsWithPattern.add(token.substring(1, token.length()));
-        } else if (CharMatcher.anyOf("*").lastIndexIn(token) == token.length() - 1) {
-          this.ignoreTableStartsWithPattern.add(token.substring(0, token.length() - 1));
-        } else {
-          this.ignoreTableList.add(token);
-        }
-      }
-    }
-  }
-
-  protected void setIgnoreColumn() {
-
-    if (!Strings.isNullOrEmpty(ignoreColumnsStr)) {
-      StringTokenizer strTok = new StringTokenizer(ignoreColumnsStr, ",");
-      while (strTok.hasMoreTokens()) {
-        String token = strTok.nextToken().toLowerCase().trim();
-        if (CharMatcher.anyOf("*").indexIn(token) == 0) {
-          this.ignoreColumnEndsWithPattern.add(token.substring(1, token.length()));
-        } else if (CharMatcher.anyOf("*").lastIndexIn(token) == token.length() - 1) {
-          this.ignoreColumnStartsWithPattern.add(token.substring(0, token.length() - 1));
-        } else {
-          this.ignoreColumnList.add(token);
-        }
-      }
-    }
   }
 
   public boolean isGenDao() {
@@ -332,6 +282,49 @@ public class CodegenOptions {
 
   public Map<String, String> getVersions() {
     return versions;
+  }
+
+  public CodegenOptions addGenTable(String tableName) {
+    this.tableList.add(tableName);
+    return this;
+  }
+
+  public CodegenOptions addGenTables(List<String> tableNames) {
+    this.tableList.addAll(tableNames);
+    return this;
+  }
+
+  protected void setIgnoreTable() {
+    if (!Strings.isNullOrEmpty(ignoreTablesStr)) {
+      StringTokenizer strTok = new StringTokenizer(ignoreTablesStr, ",");
+      while (strTok.hasMoreTokens()) {
+        String token = strTok.nextToken().toLowerCase().trim();
+        if (CharMatcher.anyOf("*").indexIn(token) == 0) {
+          this.ignoreTableEndsWithPattern.add(token.substring(1, token.length()));
+        } else if (CharMatcher.anyOf("*").lastIndexIn(token) == token.length() - 1) {
+          this.ignoreTableStartsWithPattern.add(token.substring(0, token.length() - 1));
+        } else {
+          this.ignoreTableList.add(token);
+        }
+      }
+    }
+  }
+
+  protected void setIgnoreColumn() {
+
+    if (!Strings.isNullOrEmpty(ignoreColumnsStr)) {
+      StringTokenizer strTok = new StringTokenizer(ignoreColumnsStr, ",");
+      while (strTok.hasMoreTokens()) {
+        String token = strTok.nextToken().toLowerCase().trim();
+        if (CharMatcher.anyOf("*").indexIn(token) == 0) {
+          this.ignoreColumnEndsWithPattern.add(token.substring(1, token.length()));
+        } else if (CharMatcher.anyOf("*").lastIndexIn(token) == token.length() - 1) {
+          this.ignoreColumnStartsWithPattern.add(token.substring(0, token.length() - 1));
+        } else {
+          this.ignoreColumnList.add(token);
+        }
+      }
+    }
   }
 
   public CodegenOptions addVersion(String table, String column) {
