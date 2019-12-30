@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LimitBuilder implements ISqlBuilder {
+public class LimitBuilder implements SqlBuilder {
 
     private static final String LIMIT = " limit ";
 

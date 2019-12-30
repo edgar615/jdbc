@@ -1,198 +1,167 @@
-//package com.github.edgar615.db;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class SelectBuilder {
-//    private boolean distinct;
-//
-//    private List<Object> columns = new ArrayList<Object>();
-//
-//    private List<String> tables = new ArrayList<String>();
-//
-//    private List<String> joins = new ArrayList<String>();
-//
-//    private List<String> leftJoins = new ArrayList<String>();
-//
-//    private List<String> wheres = new ArrayList<String>();
-//
-//    private List<String> groupBys = new ArrayList<String>();
-//
-//    private List<String> havings = new ArrayList<String>();
-//
-//    private List<SelectBuilder> unions = new ArrayList<SelectBuilder>();
-//
-//    private List<String> orderBys = new ArrayList<String>();
-//
-//    private int limit = 0;
-//
-//    private int offset = 0;
-//
-//    private boolean forUpdate;
-//
-//    private boolean noWait;
-//
-//    public SelectBuilder() {
-//
-//    }
-//
-//    public SelectBuilder(String table) {
-//        tables.add(table);
-//    }
-//
-//    /**
-//     * Alias for {@link #where(String)}.
-//     */
-//    public SelectBuilder and(String expr) {
-//        return where(expr);
-//    }
-//
-//    public SelectBuilder column(String name) {
-//        columns.add(name);
-//        return this;
-//    }
-//
-//    public SelectBuilder column(String name, boolean groupBy) {
-//        columns.add(name);
-//        if (groupBy) {
-//            groupBys.add(name);
-//        }
-//        return this;
-//    }
-//
-//    public SelectBuilder limit(int limit, int offset) {
-//        this.limit = limit;
-//        this.offset = offset;
-//        return this;
-//    }
-//
-//    public SelectBuilder limit(int limit) {
-//        return limit(limit, 0);
-//    }
-//
-//    public SelectBuilder distinct() {
-//        this.distinct = true;
-//        return this;
-//    }
-//
-//    public SelectBuilder forUpdate() {
-//        forUpdate = true;
-//        return this;
-//    }
-//
-//    public SelectBuilder from(String table) {
-//        tables.add(table);
-//        return this;
-//    }
-//
-//    public List<SelectBuilder> getUnions() {
-//        return unions;
-//    }
-//
-//    public SelectBuilder groupBy(String expr) {
-//        groupBys.add(expr);
-//        return this;
-//    }
-//
-//    public SelectBuilder having(String expr) {
-//        havings.add(expr);
-//        return this;
-//    }
-//
-//    public SelectBuilder join(String join) {
-//        joins.add(join);
-//        return this;
-//    }
-//
-//    public SelectBuilder leftJoin(String join) {
-//        leftJoins.add(join);
-//        return this;
-//    }
-//
-//    public SelectBuilder noWait() {
-//        if (!forUpdate) {
-//            throw new RuntimeException("noWait without forUpdate cannot be called");
-//        }
-//        noWait = true;
-//        return this;
-//    }
-//
-//    public SelectBuilder orderBy(String name) {
-//        orderBys.add(name);
-//        return this;
-//    }
-//
-//    /**
-//     * Adds an ORDER BY item with a direction indicator.
-//     *
-//     * @param name
-//     *            Name of the column by which to sort.
-//     * @param ascending
-//     *            If true, specifies the direction "asc", otherwise, specifies
-//     *            the direction "desc".
-//     */
-//    public SelectBuilder orderBy(String name, boolean ascending) {
-//        if (ascending) {
-//            orderBys.add(name + " asc");
-//        } else {
-//            orderBys.add(name + " desc");
-//        }
-//        return this;
-//    }
-//
-//    @Override
-//    public String toString() {
-//
-//        StringBuilder sql = new StringBuilder("select ");
-//
-//        if (distinct) {
-//            sql.append("distinct ");
-//        }
-//
-//        if (columns.size() == 0) {
-//            sql.append("*");
-//        } else {
-//            appendList(sql, columns, "", ", ");
-//        }
-//
-//        appendList(sql, tables, " from ", ", ");
-//        appendList(sql, joins, " join ", " join ");
-//        appendList(sql, leftJoins, " left join ", " left join ");
-//        appendList(sql, wheres, " where ", " and ");
-//        appendList(sql, groupBys, " group by ", ", ");
-//        appendList(sql, havings, " having ", " and ");
-//        appendList(sql, unions, " union ", " union ");
-//        appendList(sql, orderBys, " order by ", ", ");
-//
-//        if (forUpdate) {
-//            sql.append(" for update");
-//            if (noWait) {
-//                sql.append(" nowait");
-//            }
-//        }
-//
-//        if(limit > 0)
-//            sql.append(" limit " + limit);
-//        if(offset > 0)
-//            sql.append(", " + offset);
-//
-//        return sql.toString();
-//    }
-//
-//    /**
-//     * Adds a "union" select builder. The generated SQL will union this query
-//     * with the result of the main query. The provided builder must have the
-//     * same columns as the parent select builder and must not use "order by" or
-//     * "for update".
-//     */
-//    public SelectBuilder union(SelectBuilder unionBuilder) {
-//        unions.add(unionBuilder);
-//        return this;
-//    }
-//
-//    public SelectBuilder where(String expr) {
-//        wheres.add(expr);
-//        return this;
-//    }
-//
-//}
+package com.github.edgar615.db;
+
+import com.google.common.base.Joiner;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SelectBuilder extends ClauseBuilder implements SqlBuilder {
+
+  private boolean distinct;
+
+  private final List<String> columns = new ArrayList<>();
+
+  private final String table;
+
+  private List<String> joins = new ArrayList<String>();
+
+  private List<String> leftJoins = new ArrayList<String>();
+
+  private final GroupByBuilder groupByBuilder = GroupByBuilder.create();
+
+  private final HavingBuilder havingBuilder = HavingBuilder.create();
+
+  private final OrderByBuilder orderByBuilder = OrderByBuilder.create();
+
+  private int limit = 0;
+
+  private int offset = 0;
+
+  private boolean forUpdate;
+
+  private boolean noWait;
+
+  private SelectBuilder(String table) {
+    this.table = table;
+  }
+
+  public static SelectBuilder create(String table) {
+    return new SelectBuilder(table);
+  }
+
+  @Override
+  public SelectBuilder and(Predicate predicate) {
+    super.and(predicate);
+    return this;
+  }
+
+  @Override
+  public SelectBuilder or(Predicate predicate) {
+    super.or(predicate);
+    return this;
+  }
+
+  public SelectBuilder column(String name) {
+    columns.add(name);
+    return this;
+  }
+
+  public SelectBuilder limit(int limit, int offset) {
+    this.limit = limit;
+    this.offset = offset;
+    return this;
+  }
+
+  public SelectBuilder limit(int limit) {
+    return limit(limit, 0);
+  }
+
+  public SelectBuilder distinct() {
+    this.distinct = true;
+    return this;
+  }
+
+  public SelectBuilder forUpdate() {
+    forUpdate = true;
+    return this;
+  }
+
+  public SelectBuilder forUpdateNoWait() {
+    forUpdate = true;
+    this.noWait = true;
+    return this;
+  }
+
+  public SelectBuilder groupBy(String expr) {
+    groupByBuilder.add(expr);
+    return this;
+  }
+
+  public SelectBuilder having(Predicate predicate) {
+    havingBuilder.and(predicate);
+    return this;
+  }
+
+  public SelectBuilder asc(String name) {
+    orderByBuilder.asc(name);
+    return this;
+  }
+
+  public SelectBuilder desc(String name) {
+    orderByBuilder.desc(name);
+    return this;
+  }
+
+  public SelectBuilder join(String join) {
+    joins.add(join);
+    return this;
+  }
+
+  public SelectBuilder leftJoin(String join) {
+    leftJoins.add(join);
+    return this;
+  }
+
+  @Override
+  public SQLBindings build() {
+    StringBuilder sql = new StringBuilder("select ");
+    List<Object> args = new ArrayList<>();
+
+    if (distinct) {
+      sql.append("distinct ");
+    }
+
+    if (columns.size() == 0) {
+      sql.append("*");
+    } else {
+      sql.append(Joiner.on(", ").join(columns));
+    }
+
+    sql.append(" from ")
+        .append(table);
+    if (!joins.isEmpty()) {
+      sql.append(" join ")
+          .append(Joiner.on(" join ").join(joins));
+    }
+    if (!leftJoins.isEmpty()) {
+      sql.append(" left join ")
+          .append(Joiner.on(" left join ").join(leftJoins));
+    }
+    SQLBindings where = whereBuilder.build();
+    sql.append(where.sql());
+    args.addAll(where.bindings());
+
+    SQLBindings groupBy = groupByBuilder.build();
+    sql.append(groupBy.sql());
+    args.addAll(groupBy.bindings());
+
+    SQLBindings having = havingBuilder.build();
+    sql.append(having.sql());
+    args.addAll(having.bindings());
+
+    SQLBindings orderBy = orderByBuilder.build();
+    sql.append(orderBy.sql());
+    args.addAll(orderBy.bindings());
+
+    SQLBindings limitOffset = LimitBuilder.limitAndOffset(limit, offset).build();
+    sql.append(limitOffset.sql());
+    args.addAll(limitOffset.bindings());
+
+    if (forUpdate) {
+      sql.append(" for update");
+      if (noWait) {
+        sql.append(" nowait");
+      }
+    }
+    return SQLBindings.create(sql.toString(), args);
+  }
+}

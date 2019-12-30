@@ -1,5 +1,6 @@
 package com.github.edgar615.db;
 
-public interface ISqlBuilder {
+public interface SqlBuilder {
     SQLBindings build();
+
 }

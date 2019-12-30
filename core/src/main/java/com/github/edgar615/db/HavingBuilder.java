@@ -2,25 +2,25 @@ package com.github.edgar615.db;
 
 import com.google.common.collect.Lists;
 
-public class WhereBuilder implements SqlBuilder {
+public class HavingBuilder implements SqlBuilder {
 
     private Predicate predicate;
 
-    private WhereBuilder() {
+    private HavingBuilder() {
     }
-    private WhereBuilder(Predicate predicate) {
+    private HavingBuilder(Predicate predicate) {
         this.predicate = predicate;
     }
 
-    public static WhereBuilder create() {
-        return new WhereBuilder();
+    public static HavingBuilder create() {
+        return new HavingBuilder();
     }
 
-    public static WhereBuilder create(Predicate predicate) {
-        return new WhereBuilder(predicate);
+    public static HavingBuilder create(Predicate predicate) {
+        return new HavingBuilder(predicate);
     }
 
-    public WhereBuilder and(Predicate predicate) {
+    public HavingBuilder and(Predicate predicate) {
         if (this.predicate == null) {
             this.predicate = predicate;
             return this;
@@ -33,7 +33,7 @@ public class WhereBuilder implements SqlBuilder {
         return this;
     }
 
-    public WhereBuilder or(Predicate predicate) {
+    public HavingBuilder or(Predicate predicate) {
         if (predicate == null) {
             this.predicate = predicate;
             return this;
@@ -52,7 +52,7 @@ public class WhereBuilder implements SqlBuilder {
             return SQLBindings.create("", Lists.newArrayList());
         }
         SQLBindings sqlBindings = predicate.toSql();
-        StringBuilder sql = new StringBuilder(" where ")
+        StringBuilder sql = new StringBuilder(" having ")
             .append(sqlBindings.sql());
         return SQLBindings.create(sql.toString(), sqlBindings.bindings());
     }

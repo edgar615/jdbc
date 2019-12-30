@@ -82,7 +82,7 @@ public class JdbcUtilsTest {
     SQLBindings sqlBindings = JdbcUtils.updateById(device, null, null, 1);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
-    Assert.assertEquals("update device add barcode = ?,company_code = ? where device_id = ?",
+    Assert.assertEquals("update device set barcode = ?,company_code = ? where device_id = ?",
         sqlBindings.sql());
     Assert.assertEquals("barcode", sqlBindings.bindings().get(0));
     Assert.assertEquals(0, sqlBindings.bindings().get(1));
@@ -101,7 +101,7 @@ public class JdbcUtilsTest {
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
     Assert.assertEquals(
-        "update device add barcode = ?,company_code = ?,parent_id = parent_id + 1,device_code = device_code - 2,type = type + 1.0,add_on = add_on - 1.1,manufacturer_name = null where device_id = ?",
+        "update device set barcode = ?,company_code = ?,parent_id = parent_id + 1,device_code = device_code - 2,type = type + 1.0,add_on = add_on - 1.1,manufacturer_name = null where device_id = ?",
         sqlBindings.sql());
     Assert.assertEquals("barcode", sqlBindings.bindings().get(0));
     Assert.assertEquals(0, sqlBindings.bindings().get(1));
@@ -145,7 +145,7 @@ public class JdbcUtilsTest {
         Lists.newArrayList("abc", "userId", "parentId"), 1);
     System.out.println(sqlBindings.sql());
     System.out.println(sqlBindings.bindings());
-    Assert.assertEquals("update device add user_id = null,parent_id = null where device_id = ?",
+    Assert.assertEquals("update device set user_id = null,parent_id = null where device_id = ?",
         sqlBindings.sql());
     Assert.assertEquals(1, sqlBindings.bindings().get(0));
   }
