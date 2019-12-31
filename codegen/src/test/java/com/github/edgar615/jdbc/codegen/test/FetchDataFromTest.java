@@ -21,7 +21,7 @@ public class FetchDataFromTest {
         .setSrcFolderPath("spring-support/src/test/java")//生成JAVA文件的存放目录
         .setDomainPackage("com.github.edgar615.jdbc.spring.entity")//domain类的包名
         .setIgnoreColumnsStr("created_on,updated_on")
-        .setDaoOptions(new DaoOptions().setDaoPackage("com.github.edgar615.jdbc.spring.dao").addLogicDeleteOptions("user", new LogicDeleteOptions("state")))
+        .setDaoOptions(new DaoOptions().setDaoPackage("com.github.edgar615.jdbc.spring.dao"))
         .setGenRule(true)
         .addGenTable("user")
         .addVersion("user", "add_time");
