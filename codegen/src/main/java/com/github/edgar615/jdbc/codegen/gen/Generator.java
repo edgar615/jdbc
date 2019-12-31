@@ -56,16 +56,16 @@ public class Generator {
           }
         });
     codegen.addImport("com.google.common.base.MoreObjects");
-    codegen.addImport("com.github.edgar615.util.sql.Persistent");
-    codegen.addImport("com.github.edgar615.util.sql.PrimaryKey");
+    codegen.addImport("com.github.edgar615.jdbc.Persistent");
+    codegen.addImport("com.github.edgar615.jdbc.PrimaryKey");
     boolean containsVersion = table.getColumns().stream()
         .filter(c -> !c.isIgnore())
         .anyMatch(c -> c.isVersion());
     if (containsVersion) {
-      codegen.addImport("com.github.edgar615.util.sql.VersionKey");
+      codegen.addImport("com.github.edgar615.jdbc.VersionKey");
     }
     if (table.getContainsVirtual()) {
-      codegen.addImport("com.github.edgar615.util.sql.VirtualKey");
+      codegen.addImport("com.github.edgar615.jdbc.VirtualKey");
     }
     codegen.genCode(table);
   }
@@ -90,7 +90,7 @@ public class Generator {
     codegen.addImport("java.util.List");
     codegen.addImport("java.util.Map");
     codegen.addImport("com.google.common.collect.Lists");
-    codegen.addImport("com.github.edgar615.util.sql.PersistentKit");
+    codegen.addImport("com.github.edgar615.jdbc.PersistentKit");
     codegen.genCode(table);
   }
 
@@ -107,7 +107,7 @@ public class Generator {
     Codegen daoGen = new Codegen(this.options.getSrcFolderPath(),
         this.options.getDaoOptions().getDaoPackage(), "Dao", daoTplFile);
     daoGen.addVariable("domainPackage", this.options.getDomainPackage());
-    daoGen.addImport("com.github.edgar615.util.sql.BaseDao");
+    daoGen.addImport("com.github.edgar615.dao.BaseDao");
     if (!this.options.getDomainPackage().equals(this.options.getDaoOptions().getDaoPackage())) {
       daoGen.addImport(this.options.getDomainPackage() + "." + table.getUpperCamelName());
     }
@@ -122,8 +122,8 @@ public class Generator {
     daoImplGen.addVariable("daoPackage", this.options.getDaoOptions().getDaoPackage());
     daoImplGen.addVariable("domainPackage", this.options.getDomainPackage());
     daoImplGen.addVariable("supportSpring", this.options.getDaoOptions().isSupportSpring());
-    daoImplGen.addImport("com.github.edgar615.util.sql.BaseDaoImpl")
-        .addImport("com.github.edgar615.util.sql.Jdbc");
+    daoImplGen.addImport("com.github.edgar615.dao.BaseDaoImpl")
+        .addImport("com.github.edgar615.jdbc.Jdbc");
 
     if (!this.options.getDomainPackage().equals(daoImplPackage)) {
       daoImplGen.addImport(this.options.getDomainPackage() + "." + table.getUpperCamelName());
@@ -148,7 +148,7 @@ public class Generator {
           this.options.getMybatisOptions().getMapperClassPackage(), "Mapper", mapperTplFile);
     }
 
-    codegen.addImport("com.github.edgar615.util.mybatis.BaseMapper");
+    codegen.addImport("com.github.edgar615.mybatis.spring.BaseMapper");
     codegen.addImport("com.github.edgar615.util.search.Example");
     codegen.addImport("java.util.List");
     codegen.addImport("java.util.Map");
@@ -205,14 +205,14 @@ public class Generator {
       }
     }
 
-    if (options.isGenMybatis() && options.getMybatisOptions() != null) {
-      tables.stream()
-          .filter(t -> !t.isIgnore())
-          .forEach(t -> generateMapperClass(t));
-      tables.stream()
-          .filter(t -> !t.isIgnore())
-          .forEach(t -> generateMapperXml(t));
-    }
+//    if (options.isGenMybatis() && options.getMybatisOptions() != null) {
+//      tables.stream()
+//          .filter(t -> !t.isIgnore())
+//          .forEach(t -> generateMapperClass(t));
+//      tables.stream()
+//          .filter(t -> !t.isIgnore())
+//          .forEach(t -> generateMapperXml(t));
+//    }
   }
 
 

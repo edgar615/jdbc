@@ -80,6 +80,21 @@ public interface Jdbc {
       ID id);
 
   /**
+   * 根据主键批量更新，忽略实体中的null
+   *
+   * @param persistent 持久化对象
+   * @param addOrSub 需要做增加或者减去的字段，value为正数表示增加，负数表示减少
+   * @param nullFields 需要设为null的字段
+   * @param idList 主键ID的集合
+   * @param <ID> 主键类型
+   * @return 修改记录数
+   */
+//  <ID> int batchUpdateById(Persistent<ID> persistent,
+//      Map<String, Number> addOrSub,
+//      List<String> nullFields,
+//      List<ID> idList);
+
+  /**
    * 根据条件更新，忽略实体中的null
    *
    * @param persistent 持久化对象
@@ -170,6 +185,18 @@ public interface Jdbc {
   default <ID> int updateById(Persistent<ID> persistent, ID id) {
     return updateById(persistent, new HashMap<>(), new ArrayList<>(), id);
   }
+
+  /**
+   * 根据主键批量更新，忽略实体中的null.
+   *
+   * @param persistent 持久化对象
+   * @param idList 主键列表
+   * @param <ID> 主键类型
+   * @return 修改记录数
+   */
+//  default <ID> int batchUpdateById(Persistent<ID> persistent, List<ID> idList) {
+//    return batchUpdateById(persistent, new HashMap<>(), new ArrayList<>(), idList);
+//  }
 
   /**
    * 根据主键列表，迭代调用updateById删除记录，用于简化部分业务代码。<b>这个方法不是用<code>id in (...)</code>或者batch来更新.</b>

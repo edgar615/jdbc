@@ -11,6 +11,8 @@
   <modules>
     <module>core</module>
     <module>codegen</module>
+    <module>spring-support</module>
+    <module>mybatis-spring-support</module>
   </modules>
 
 
@@ -24,6 +26,9 @@
     <awaitility.version>2.0.0</awaitility.version>
     <guava.version>26.0-jre</guava.version>
     <util.version>1.2.0</util.version>
+    <mysql.version>8.0.11</mysql.version>
+    <HikariCP.version>2.4.1</HikariCP.version>
+    <logback.version>1.2.3</logback.version>
     <spring.boot.version>2.0.1.RELEASE</spring.boot.version>
     <jdbc.release.version>2.0.0</jdbc.release.version>
   </properties>

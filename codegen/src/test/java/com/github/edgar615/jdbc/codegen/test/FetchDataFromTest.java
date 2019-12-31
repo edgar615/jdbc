@@ -1,6 +1,7 @@
 package com.github.edgar615.jdbc.codegen.test;
 
 import com.github.edgar615.jdbc.codegen.gen.CodegenOptions;
+import com.github.edgar615.jdbc.codegen.gen.DaoOptions;
 import com.github.edgar615.jdbc.codegen.gen.Generator;
 import com.github.edgar615.jdbc.codegen.gen.MybatisOptions;
 
@@ -10,25 +11,18 @@ import com.github.edgar615.jdbc.codegen.gen.MybatisOptions;
 public class FetchDataFromTest {
 
   public static void main(String[] args) throws Exception {
-    CodegenOptions options = new CodegenOptions().setUsername("root")
-        .setPassword("123456")
-        .addGenTable("sys_user")
-        .setIgnoreColumnsStr("created*,updated_on")
+    CodegenOptions options = new CodegenOptions()
+        .setUsername("tabao")//用户名
+        .setPassword("Nq2KB@Wcywy") //密码
+        .setHost("192.168.1.210") //数据库地址
+        .setPort(3306) //端口，默认值3306
+        .setDatabase("tabao") //数据库
+        .setSrcFolderPath("mybatis-spring-support/src/test/java")//生成JAVA文件的存放目录
+        .setDomainPackage("com.github.edgar615.jdbc.spring.entity")//domain类的包名
+        .setIgnoreColumnsStr("created_on,updated_on")
+//        .setDaoOptions(new DaoOptions().setDaoPackage("com.github.edgar615.jdbc.spring.dao"))
         .setGenRule(true)
-        .setDatabase("tabao")
-        .setHost("localhost")
-        .setPort(3306)
-        .setJdbcArg("verifyServerCertificate=false&useSSL=true&requireSSL=true")
-//            .setTableNamePattern("device")
-//                .setIgnoreColumnsStr("photo_path,degree")
-        .setSrcFolderPath("src/test/codegen")
-        .setDomainPackage("com.github.edgar615.util.mybatis")
-//        .setDaoOptions(new DaoOptions().setGenImpl(false).setDaoPackage("com.github.edgar615.test.codegen.dao")
-//        .setSupportSpring(true))
-        .setMybatisOptions(
-            new MybatisOptions().setMapperClassPackage("com.github.edgar615.util.mybatis")
-                .setXmlFolderPath("src/test/resources/mapper"));
-
+        .addGenTable("user");
     new Generator(options).generate();
 
   }

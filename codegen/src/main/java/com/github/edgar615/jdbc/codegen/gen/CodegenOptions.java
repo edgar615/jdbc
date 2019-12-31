@@ -65,8 +65,8 @@ public class CodegenOptions {
   private boolean genRule = DEFAULT_GEN_RULE;
   private DaoOptions daoOptions;
   private boolean genDao = false;
-  private MybatisOptions mybatisOptions;
-  private boolean genMybatis = false;
+//  private MybatisOptions mybatisOptions;
+//  private boolean genMybatis = false;
   private String ignoreTablesStr = DEFAULT_IGNORE_TABLES;
 
   private String ignoreColumnsStr = DEFAULT_IGNORE_COLUMN;
@@ -238,20 +238,20 @@ public class CodegenOptions {
     this.genDao = true;
     return this;
   }
-
-  public MybatisOptions getMybatisOptions() {
-    return mybatisOptions;
-  }
-
-  public CodegenOptions setMybatisOptions(MybatisOptions mybatisOptions) {
-    this.mybatisOptions = mybatisOptions;
-    this.genMybatis = true;
-    return this;
-  }
-
-  public boolean isGenMybatis() {
-    return genMybatis;
-  }
+//
+//  public MybatisOptions getMybatisOptions() {
+//    return mybatisOptions;
+//  }
+//
+//  public CodegenOptions setMybatisOptions(MybatisOptions mybatisOptions) {
+//    this.mybatisOptions = mybatisOptions;
+//    this.genMybatis = true;
+//    return this;
+//  }
+//
+//  public boolean isGenMybatis() {
+//    return genMybatis;
+//  }
 
   public boolean isGenRule() {
     return genRule;

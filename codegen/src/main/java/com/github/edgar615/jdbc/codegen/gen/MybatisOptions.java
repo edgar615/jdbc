@@ -6,6 +6,7 @@ package com.github.edgar615.jdbc.codegen.gen;
  * @author Edgar
  * @create 2018-08-31 19:31
  **/
+@Deprecated
 public class MybatisOptions {
 
   private static final String DEFAULT_MAPPER_CLASS_PACKAGE = "com.github.edgar615.codegen.dao";

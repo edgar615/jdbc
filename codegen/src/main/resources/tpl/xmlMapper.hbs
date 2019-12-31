@@ -62,10 +62,13 @@
   </sql>
 
   <sql id="order_by">
-    <if test="example.orderBy() != null and example.orderBy().size() > 0">
-      order by ${example.orderSql}
-    </if>
-  </sql>
+      <if test="example.orderBy() != null and example.orderBy().size() > 0">
+        order by
+        <foreach item="field" index="index" collection="example.orderBy()" separator=",">
+          ${@com.github.edgar615.mybatis.spring.MybatisUtils@orderBy(field)}
+        </foreach>
+      </if>
+    </sql>
 
   <sql id="update_sql">
     <set>
