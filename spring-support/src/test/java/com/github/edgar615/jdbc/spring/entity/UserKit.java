@@ -16,6 +16,47 @@ public class UserKit implements PersistentKit<Long, User> {
 
     private static final long serialVersionUID = 1L;
     
+    public static final String DB_USER_ID = "user_id";
+    
+    public static final String DB_TYPE = "type";
+    
+    public static final String DB_USERNAME = "username";
+    
+    public static final String DB_HEAD_PIC = "head_pic";
+    
+    public static final String DB_NICKNAME = "nickname";
+    
+    public static final String DB_FULLNAME = "fullname";
+    
+    public static final String DB_MOBILE = "mobile";
+    
+    public static final String DB_MOBILE_AREA = "mobile_area";
+    
+    public static final String DB_MOBILE_BIND_TIME = "mobile_bind_time";
+    
+    public static final String DB_MAIL = "mail";
+    
+    public static final String DB_EMAIL_BIND_TIME = "email_bind_time";
+    
+    public static final String DB_STATE = "state";
+    
+    public static final String DB_GENDER = "gender";
+    
+    public static final String DB_BIRTHDAY = "birthday";
+    
+    public static final String DB_AGE = "age";
+    
+    public static final String DB_LANGUAGE = "language";
+    
+    public static final String DB_TIME_ZONE = "time_zone";
+    
+    public static final String DB_REGION_CODE = "region_code";
+    
+    public static final String DB_INTERNAL = "internal";
+    
+    public static final String DB_ADD_TIME = "add_time";
+    
+    
     public static final String USER_ID = "userId";
     
     public static final String TYPE = "type";
@@ -56,7 +97,6 @@ public class UserKit implements PersistentKit<Long, User> {
     
     public static final String ADD_TIME = "addTime";
     
-
     @Override
     public List<String> fields() {
       return Lists.newArrayList(USER_ID,
@@ -79,6 +119,11 @@ public class UserKit implements PersistentKit<Long, User> {
 						REGION_CODE,
 						INTERNAL,
 						ADD_TIME);
+    }
+    
+    
+    public String versionField() {
+        return ADD_TIME;
     }
     
     @Override
@@ -184,4 +229,6 @@ public class UserKit implements PersistentKit<Long, User> {
 
    /* START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.*/
 	/* END Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.*/
+
+
 }

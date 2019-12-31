@@ -105,6 +105,21 @@ public class Table {
         .anyMatch(c -> c.isGenColumn());
   }
 
+  public boolean getContainsVersion() {
+    return columns.stream()
+        .filter(c -> !c.isIgnore())
+        .anyMatch(c -> c.isVersion());
+  }
+
+  public String getVersion() {
+    return columns.stream()
+        .filter(c -> !c.isIgnore())
+        .filter(c -> c.isVersion())
+        .map(c -> c.getName())
+        .findFirst()
+        .get();
+  }
+
   public String getPk() {
     return columns.stream()
         .filter(c -> !c.isIgnore())

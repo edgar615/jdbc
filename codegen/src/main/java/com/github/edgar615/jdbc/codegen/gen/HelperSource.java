@@ -2,7 +2,9 @@ package com.github.edgar615.jdbc.codegen.gen;
 
 import com.github.edgar615.jdbc.codegen.db.Column;
 import com.github.jknack.handlebars.Options;
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +69,14 @@ public class HelperSource {
 
   public CharSequence newLine(Object v1, Options options) throws IOException {
     return "\n";
+  }
+
+  public CharSequence toUpperCamelName(Object v1, Options options) throws IOException {
+    return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, v1.toString());
+  }
+
+  public CharSequence toLowerCamelName(Object v1, Options options) throws IOException {
+    return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, v1.toString());
   }
 
   public CharSequence blank(Object v1, Options options) throws IOException {

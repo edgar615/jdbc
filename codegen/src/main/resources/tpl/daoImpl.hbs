@@ -11,10 +11,60 @@ package {{package}};
 */
 {{#if supportSpring}}@Service{{/if}}
 public class {{table.upperCamelName}}{{suffix}} extends BaseDaoImpl<{{table.pkType.name}}, {{table.upperCamelName}}> implements {{table.upperCamelName}}Dao {
+    {{#if supportLogicDelete}}
+    private static final String LOGIC_DELETE_FIELD = "{{lowUnderscoreToLowCamel logicDeleteField}}";
 
-   public {{table.upperCamelName}}{{suffix}}(Jdbc jdbc) {
-      super({{table.upperCamelName}}.class, jdbc);
-   }
+    private static final String PRIMARY_FIELD = "{{lowUnderscoreToLowCamel table.pk}}";
 
-   {{safestr userSource}}
+    private static final int LOGIC_DELETE_VALUE = {{logicDeleteValue}};
+
+    private static final int LOGIC_NOT_DELETE_VALUE = {{logicNotDeleteValue}};
+    {{/if}}
+    public {{table.upperCamelName}}{{suffix}}(Jdbc jdbc) {
+        super({{table.upperCamelName}}.class, jdbc);
+    }
+    {{#if supportLogicDelete}}
+    @Override
+    public int deleteById({{table.pkType.name}} id) {
+      {{table.upperCamelName}} {{table.lowerCamelName}} = new {{table.upperCamelName}}();
+      {{table.lowerCamelName}}.set{{~ toUpperCamelName logicDeleteField}}(LOGIC_DELETE_VALUE);
+      return updateById({{table.lowerCamelName}}, id);
+    }
+
+    @Override
+    public int deleteByExample(Example example) {
+      {{table.upperCamelName}} {{table.lowerCamelName}} = new {{table.upperCamelName}}();
+      {{table.lowerCamelName}}.set{{~ toUpperCamelName logicDeleteField}}(LOGIC_DELETE_VALUE);
+      return updateByExample({{table.lowerCamelName}}, example);
+    }
+
+    @Override
+    public {{table.upperCamelName}} findById({{table.pkType.name}} id, List<String> fields) {
+      Example example = Example.create()
+        .equalsTo(PRIMARY_FIELD, id)
+        .equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE)
+        .addFields(fields);
+      return findFirstByExample(example);
+    }
+
+    @Override
+    public List<{{table.upperCamelName}}> findByExample(Example example) {
+      example.equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE);
+      return jdbc.findByExample(elementType, example);
+    }
+
+    @Override
+    public List<{{table.upperCamelName}}> findByExample(Example example, int start, int limit) {
+      example.equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE);
+      return jdbc.findByExample(elementType, example, start, limit);
+    }
+
+    @Override
+    public int countByExample(Example example) {
+      example.equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE);
+      return jdbc.countByExample(elementType, example);
+    }
+    {{/if}}
+
+    {{safestr userSource}}
 }

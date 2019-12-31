@@ -6,6 +6,7 @@ import com.github.edgar615.jdbc.codegen.db.Table;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.rmi.runtime.Log;
 
 /**
  * Created by Edgar on 2017/5/17.
@@ -122,6 +123,17 @@ public class Generator {
     daoImplGen.addVariable("daoPackage", this.options.getDaoOptions().getDaoPackage());
     daoImplGen.addVariable("domainPackage", this.options.getDomainPackage());
     daoImplGen.addVariable("supportSpring", this.options.getDaoOptions().isSupportSpring());
+    if (this.options.getDaoOptions().getLogicDeleteOptions().get(table.getName()) != null) {
+      LogicDeleteOptions logicDeleteOptions = this.options.getDaoOptions().getLogicDeleteOptions().get(table.getName());
+      if (logicDeleteOptions != null) {
+        daoImplGen.addVariable("supportLogicDelete", true);
+        daoImplGen.addVariable("logicDeleteField", logicDeleteOptions.getLogicDeleteField());
+        daoImplGen.addVariable("logicDeleteValue", logicDeleteOptions.getLogicDeleteValue());
+        daoImplGen.addVariable("logicNotDeleteValue", logicDeleteOptions.getLogicNotDeleteValue());
+        daoImplGen.addImport("com.github.edgar615.util.search.Example")
+            .addImport("java.util.List");
+      }
+    }
     daoImplGen.addImport("com.github.edgar615.dao.BaseDaoImpl")
         .addImport("com.github.edgar615.jdbc.Jdbc");
 
@@ -137,49 +149,49 @@ public class Generator {
     daoImplGen.genCode(table);
   }
 
-  private void generateMapperClass(Table table) {
-    Codegen codegen;
-    if (this.options.getMybatisOptions().isCacheWildcardEvict()) {
-      codegen = new Codegen(this.options.getSrcFolderPath(),
-          this.options.getMybatisOptions().getMapperClassPackage(), "Mapper",
-          wildcardEvictCacheMapperTplFile);
-    } else {
-      codegen = new Codegen(this.options.getSrcFolderPath(),
-          this.options.getMybatisOptions().getMapperClassPackage(), "Mapper", mapperTplFile);
-    }
-
-    codegen.addImport("com.github.edgar615.mybatis.spring.BaseMapper");
-    codegen.addImport("com.github.edgar615.util.search.Example");
-    codegen.addImport("java.util.List");
-    codegen.addImport("java.util.Map");
-    codegen.addImport("org.apache.ibatis.annotations.Mapper");
-    codegen.addImport("org.apache.ibatis.annotations.Param");
-    codegen.addImport("org.springframework.cache.annotation.CacheConfig");
-    codegen.addImport("org.springframework.cache.annotation.CacheEvict");
-    codegen.addImport("org.springframework.cache.annotation.Cacheable");
-    codegen.addVariable("domainPackage", this.options.getDomainPackage());
-    if (!this.options.getDomainPackage()
-        .equals(this.options.getMybatisOptions().getMapperClassPackage())) {
-      codegen.addImport(this.options.getDomainPackage() + "." + table.getUpperCamelName());
-    }
-    codegen.genCode(table);
-  }
-
-  private void generateMapperXml(Table table) {
-    Codegen codegen = new Codegen(this.options.getMybatisOptions().getXmlFolderPath(),
-        this.options.getMybatisOptions().getMapperClassPackage(), "Mapper", mapperXmlTplFile);
-    codegen.addVariable("domainPackage", this.options.getDomainPackage());
-    codegen.addVariable("mapperPackage", this.options.getMybatisOptions().getMapperClassPackage());
-    codegen.addVariable("mapperSuffix", "Mapper");
-    codegen.setFileType(".xml");
-    codegen.setCommentStart(
-        "<!-- START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags. -->");
-    codegen.setCommentEnd(
-        "<!-- END Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.-->");
-    codegen.setIsCommentStart("<!-- START ");
-    codegen.setIsCommentEnd("<!-- END ");
-    codegen.genCode(table);
-  }
+//  private void generateMapperClass(Table table) {
+//    Codegen codegen;
+//    if (this.options.getMybatisOptions().isCacheWildcardEvict()) {
+//      codegen = new Codegen(this.options.getSrcFolderPath(),
+//          this.options.getMybatisOptions().getMapperClassPackage(), "Mapper",
+//          wildcardEvictCacheMapperTplFile);
+//    } else {
+//      codegen = new Codegen(this.options.getSrcFolderPath(),
+//          this.options.getMybatisOptions().getMapperClassPackage(), "Mapper", mapperTplFile);
+//    }
+//
+//    codegen.addImport("com.github.edgar615.mybatis.spring.BaseMapper");
+//    codegen.addImport("com.github.edgar615.util.search.Example");
+//    codegen.addImport("java.util.List");
+//    codegen.addImport("java.util.Map");
+//    codegen.addImport("org.apache.ibatis.annotations.Mapper");
+//    codegen.addImport("org.apache.ibatis.annotations.Param");
+//    codegen.addImport("org.springframework.cache.annotation.CacheConfig");
+//    codegen.addImport("org.springframework.cache.annotation.CacheEvict");
+//    codegen.addImport("org.springframework.cache.annotation.Cacheable");
+//    codegen.addVariable("domainPackage", this.options.getDomainPackage());
+//    if (!this.options.getDomainPackage()
+//        .equals(this.options.getMybatisOptions().getMapperClassPackage())) {
+//      codegen.addImport(this.options.getDomainPackage() + "." + table.getUpperCamelName());
+//    }
+//    codegen.genCode(table);
+//  }
+//
+//  private void generateMapperXml(Table table) {
+//    Codegen codegen = new Codegen(this.options.getMybatisOptions().getXmlFolderPath(),
+//        this.options.getMybatisOptions().getMapperClassPackage(), "Mapper", mapperXmlTplFile);
+//    codegen.addVariable("domainPackage", this.options.getDomainPackage());
+//    codegen.addVariable("mapperPackage", this.options.getMybatisOptions().getMapperClassPackage());
+//    codegen.addVariable("mapperSuffix", "Mapper");
+//    codegen.setFileType(".xml");
+//    codegen.setCommentStart(
+//        "<!-- START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags. -->");
+//    codegen.setCommentEnd(
+//        "<!-- END Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.-->");
+//    codegen.setIsCommentStart("<!-- START ");
+//    codegen.setIsCommentEnd("<!-- END ");
+//    codegen.genCode(table);
+//  }
 
   public void generate() {
     List<Table> tables = new DBFetcher(options).fetchTablesFromDb();

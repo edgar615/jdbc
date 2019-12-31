@@ -279,6 +279,27 @@ public interface Jdbc {
   }
 
   /**
+   * 根据条件查找一条数据，如果未找到任何数据，返回null；如果找到多条，抛出TooManyRowsException异常.
+   *
+   * @param elementType 持久化对象
+   * @param example 查询参数的定义，包括查询条件、排序规则等
+   * @param <ID> 主键类型
+   * @param <T> 持久化对象
+   * @return 持久化对象，如果未找到任何数据，返回null；如果找到多条，抛出TooManyRowsException异常.
+   */
+  default <ID, T extends Persistent<ID>> T findOneByExample(Class<T> elementType,
+      Example example) {
+    List<T> result = findByExample(elementType, example, 0, 2);
+    if (result == null || result.isEmpty()) {
+      return null;
+    }
+    if (result.size() > 1) {
+      throw new TooManyRowsException(result.size());
+    }
+    return result.get(0);
+  }
+
+  /**
    * 根据主键查找.
    *
    * @param elementType 持久化对象

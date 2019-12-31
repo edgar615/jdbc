@@ -53,6 +53,12 @@ public interface PersistentKit<ID, T extends Persistent<ID>> {
     return Lists.newArrayList();
   }
 
+  /**
+   * 版本字段，每次修改需要+1
+   */
+  default String versionField() {
+    return null;
+  }
 
   default void fillDefaultValue(T entity, Map<String, Object> defaultMap) {
     Map<String, Object> map = new HashMap<>();

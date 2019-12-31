@@ -13,9 +13,11 @@ public class {{table.upperCamelName}}Kit implements PersistentKit<{{table.pkType
 
     private static final long serialVersionUID = 1L;
     {{#table.columns}}{{#if ignore}}{{else}}
+    public static final String DB_{{upperUnderScoreName}} = "{{name}}";
+    {{/if}}{{/table.columns}}
+    {{#table.columns}}{{#if ignore}}{{else}}
     public static final String {{upperUnderScoreName}} = "{{lowerCamelName}}";
     {{/if}}{{/table.columns}}
-
     @Override
     public List<String> fields() {
       return Lists.newArrayList({{safestr table.upperUnderscoreFields}});
@@ -23,6 +25,11 @@ public class {{table.upperCamelName}}Kit implements PersistentKit<{{table.pkType
     {{#if table.containsVirtual}}
     public List<String> virtualFields() {
         return Lists.newArrayList({{safestr table.upperUnderscoreVirtualFields}});
+    }
+    {{/if}}
+    {{#if table.containsVersion}}
+    public String versionField() {
+        return {{upperUnderscoreToLowCamel table.version}};
     }
     {{/if}}
     @Override

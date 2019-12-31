@@ -2,6 +2,7 @@ package com.github.edgar615.jdbc.spring.entity;
 
 import com.github.edgar615.jdbc.Persistent;
 import com.github.edgar615.jdbc.PrimaryKey;
+import com.github.edgar615.jdbc.VersionKey;
 import com.google.common.base.MoreObjects;
 
 /**
@@ -257,8 +258,9 @@ public class User implements Persistent<Long> {
     * type: -5
     * size: 19
     */
+    @VersionKey
     private Long addTime;
-    
+
     public Long getUserId() {
         return userId;
     }
@@ -464,4 +466,6 @@ public class User implements Persistent<Long> {
 
    /* START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.*/
 	/* END Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.*/
+
+
 }
