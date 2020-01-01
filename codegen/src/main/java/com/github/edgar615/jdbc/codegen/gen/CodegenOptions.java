@@ -45,6 +45,7 @@ public class CodegenOptions {
   public static final String DEFAULT_PASSWORD = "";
 
   private static final boolean DEFAULT_GEN_RULE = false;
+  private static final boolean DEFAULT_GEN_JPA = false;
   private final Map<String, String> versions = new HashMap<>();
   //忽略的字段
   private final List<String> ignoreColumnList = new ArrayList<String>();
@@ -63,6 +64,7 @@ public class CodegenOptions {
   private String srcFolderPath = DEFAULT_SRC_FOLDER_PATH;
   private String domainPackage = DEFAULT_DOMAIN_PACKAGE;
   private boolean genRule = DEFAULT_GEN_RULE;
+  private boolean genJpa = DEFAULT_GEN_JPA;
   private DaoOptions daoOptions;
   private boolean genDao = false;
 //  private MybatisOptions mybatisOptions;
@@ -259,6 +261,15 @@ public class CodegenOptions {
 
   public CodegenOptions setGenRule(boolean genRule) {
     this.genRule = genRule;
+    return this;
+  }
+
+  public boolean isGenJpa() {
+    return genJpa;
+  }
+
+  public CodegenOptions setGenJpa(boolean genJpa) {
+    this.genJpa = genJpa;
     return this;
   }
 

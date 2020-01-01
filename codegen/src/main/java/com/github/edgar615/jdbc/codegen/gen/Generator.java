@@ -19,6 +19,8 @@ public class Generator {
 
   private static final String domainTplFile = "tpl/domain.hbs";
 
+  private static final String jpaDomainTplFile = "tpl/jpaDomain.hbs";
+
   private static final String kitTplFile = "tpl/domainKit.hbs";
 
   private static final String ruleTplFile = "tpl/rule.hbs";
@@ -41,7 +43,7 @@ public class Generator {
 
   private void generateDomain(Table table) {
     Codegen codegen = new Codegen(options.getSrcFolderPath(), options.getDomainPackage(), "",
-        domainTplFile);
+        options.isGenJpa() ? jpaDomainTplFile : domainTplFile);
     table.getColumns().stream()
         .filter(c -> !c.isIgnore())
         .map(c -> c.getParameterType())
