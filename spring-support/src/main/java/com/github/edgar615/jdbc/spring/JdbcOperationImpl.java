@@ -1,10 +1,9 @@
 package com.github.edgar615.jdbc.spring;
 
 import com.github.edgar615.jdbc.JdbcUtils;
-import com.github.edgar615.jdbc.Persistent;
-import com.github.edgar615.jdbc.PersistentKit;
+import com.github.edgar615.entity.Persistent;
+import com.github.edgar615.entity.PersistentKit;
 import com.github.edgar615.sql.SQLBindings;
-import com.github.edgar615.sql.SqlBuilder;
 import com.github.edgar615.util.base.StringUtils;
 import com.github.edgar615.util.reflect.ReflectionException;
 import com.github.edgar615.util.search.Example;

@@ -1,6 +1,6 @@
 package com.github.edgar615.jdbc.spring;
 
-import com.github.edgar615.jdbc.Persistent;
+import com.github.edgar615.entity.Persistent;
 import javax.sql.DataSource;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;

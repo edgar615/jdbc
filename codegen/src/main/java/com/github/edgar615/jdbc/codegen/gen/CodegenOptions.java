@@ -63,12 +63,6 @@ public class CodegenOptions {
   private final List<String> tableList = new ArrayList<>();
   private String srcFolderPath = DEFAULT_SRC_FOLDER_PATH;
   private String domainPackage = DEFAULT_DOMAIN_PACKAGE;
-  private boolean genRule = DEFAULT_GEN_RULE;
-  private boolean genJpa = DEFAULT_GEN_JPA;
-  private DaoOptions daoOptions;
-  private boolean genDao = false;
-//  private MybatisOptions mybatisOptions;
-//  private boolean genMybatis = false;
   private String ignoreTablesStr = DEFAULT_IGNORE_TABLES;
 
   private String ignoreColumnsStr = DEFAULT_IGNORE_COLUMN;
@@ -223,53 +217,6 @@ public class CodegenOptions {
 
   public CodegenOptions setPassword(String password) {
     this.password = password;
-    return this;
-  }
-
-  public boolean isGenDao() {
-    return genDao;
-  }
-
-  public DaoOptions getDaoOptions() {
-    return daoOptions;
-  }
-
-  public CodegenOptions setDaoOptions(DaoOptions daoOptions) {
-    Objects.requireNonNull(daoOptions);
-    this.daoOptions = daoOptions;
-    this.genDao = true;
-    return this;
-  }
-//
-//  public MybatisOptions getMybatisOptions() {
-//    return mybatisOptions;
-//  }
-//
-//  public CodegenOptions setMybatisOptions(MybatisOptions mybatisOptions) {
-//    this.mybatisOptions = mybatisOptions;
-//    this.genMybatis = true;
-//    return this;
-//  }
-//
-//  public boolean isGenMybatis() {
-//    return genMybatis;
-//  }
-
-  public boolean isGenRule() {
-    return genRule;
-  }
-
-  public CodegenOptions setGenRule(boolean genRule) {
-    this.genRule = genRule;
-    return this;
-  }
-
-  public boolean isGenJpa() {
-    return genJpa;
-  }
-
-  public CodegenOptions setGenJpa(boolean genJpa) {
-    this.genJpa = genJpa;
     return this;
   }
 

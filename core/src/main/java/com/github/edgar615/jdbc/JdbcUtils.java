@@ -1,5 +1,7 @@
 package com.github.edgar615.jdbc;
 
+import com.github.edgar615.entity.Persistent;
+import com.github.edgar615.entity.PersistentKit;
 import com.github.edgar615.sql.ClauseBuilder;
 import com.github.edgar615.sql.DeleteBuilder;
 import com.github.edgar615.sql.InsertBuilder;

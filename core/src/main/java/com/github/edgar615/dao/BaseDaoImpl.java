@@ -1,7 +1,7 @@
 package com.github.edgar615.dao;
 
 import com.github.edgar615.jdbc.Jdbc;
-import com.github.edgar615.jdbc.Persistent;
+import com.github.edgar615.entity.Persistent;
 import com.github.edgar615.util.search.Example;
 import java.util.List;
 import java.util.Map;

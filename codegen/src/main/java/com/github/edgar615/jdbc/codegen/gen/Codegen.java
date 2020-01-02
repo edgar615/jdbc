@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 class Codegen {
 
   private static final Handlebars handlebars = new Handlebars();
-  private static final Logger LOGGER = LoggerFactory.getLogger(Generator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Generators.class);
 
   static {
     handlebars.registerHelper("safestr", new Helper<String>() {

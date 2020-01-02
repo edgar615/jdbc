@@ -80,7 +80,7 @@ public class HelperSource {
   }
 
   public CharSequence blank(Object v1, Options options) throws IOException {
-    return "\t";
+    return "\t\t";
   }
 
   public CharSequence mapperXmlAllField(Object v1, Options options) throws IOException {

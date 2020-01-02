@@ -14,7 +14,7 @@
 
 package com.github.edgar615.jdbc.spring;
 
-import com.github.edgar615.jdbc.PersistentKit;
+import com.github.edgar615.entity.PersistentKit;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;

@@ -26,8 +26,7 @@ public class {{table.upperCamelName}} implements Persistent<{{table.pkType.name}
     * type: {{type}}
     * size: {{size}}
     */
-    {{#if primary}}@Id{{/if}}
-    @Column(name = "{{name}}", length = {{size}}{{#if nullable}}, nullable = true{{/if}})
+    @Column(name = "{{name}}", length = {{size}}{{#if nullable}}{{else}}, nullable = false{{/if}}){{#if primary}}{{~ newLine}}{{~ blank}}@Id{{/if}}{{#if version}}{{~ newLine}}{{~ blank}}@Version{{/if}}
     private {{parameterType.name}} {{lowerCamelName}};
     {{/if}}{{/table.columns}}{{#table.columns}}{{#if ignore}}{{else}}
     public {{parameterType.name}} get{{upperCamelName}}() {

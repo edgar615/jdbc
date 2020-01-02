@@ -1,4 +1,4 @@
-package com.github.edgar615.jdbc;
+package com.github.edgar615.entity;
 
 import java.io.Serializable;
 

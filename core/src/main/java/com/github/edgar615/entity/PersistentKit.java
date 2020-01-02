@@ -1,4 +1,4 @@
-package com.github.edgar615.jdbc;
+package com.github.edgar615.entity;
 
 import com.google.common.collect.Lists;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public interface PersistentKit<ID, T extends Persistent<ID>> {
    * 可以通过反射获取到所有的属性，但是因为实体类可以自动生成，所以这个方法也可以自动生成，不再通过反射. 如果要反射，类似的实现如下：
    * <pre>
    *   ReflectionUtils
-   *         .getAllFields(this.getClass(), Predicates.and(ReflectionUtils.withAnnotation(PrimaryKey.class)))
+   *         .getAllFields(this.getClass(), Predicates.and(ReflectionUtils.withAnnotation(Id.class)))
    *             .stream().map(f -> f.getName())
    *             .findFirst().get();
    * </pre>

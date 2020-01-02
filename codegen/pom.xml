@@ -23,6 +23,13 @@
       <artifactId>slf4j-api</artifactId>
       <version>${org.slf4j.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.github.jknack</groupId>
+      <artifactId>handlebars</artifactId>
+      <version>${handlebars.version}</version>
+    </dependency>
+
     <!--test-->
     <dependency>
       <groupId>junit</groupId>
@@ -57,10 +64,12 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.jknack</groupId>
-      <artifactId>handlebars</artifactId>
-      <version>${handlebars.version}</version>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+      <scope>provided</scope>
     </dependency>
+
   </dependencies>
 
 </project>

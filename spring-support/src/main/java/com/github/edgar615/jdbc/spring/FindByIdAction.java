@@ -1,6 +1,6 @@
 package com.github.edgar615.jdbc.spring;
 
-import com.github.edgar615.jdbc.Persistent;
+import com.github.edgar615.entity.Persistent;
 
 /**
  * 因为jdbc中存在两个findById的方法，如果在jdbc方法上加上缓存，两个方法总会有一个无法获得正确的结果，所以将这个功能单独作为一个类来实现

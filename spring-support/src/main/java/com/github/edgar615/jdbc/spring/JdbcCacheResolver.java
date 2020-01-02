@@ -1,6 +1,6 @@
 package com.github.edgar615.jdbc.spring;
 
-import com.github.edgar615.jdbc.Persistent;
+import com.github.edgar615.entity.Persistent;
 import com.github.edgar615.jdbc.spring.JdbcCacheProperties.JdbcCacheConfigSpec;
 import com.github.edgar615.util.exception.DefaultErrorCode;
 import com.github.edgar615.util.exception.SystemException;

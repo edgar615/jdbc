@@ -1,5 +1,6 @@
 package com.github.edgar615.jdbc;
 
+import com.github.edgar615.entity.Persistent;
 import com.github.edgar615.util.page.Page;
 import com.github.edgar615.util.page.Pagination;
 import com.github.edgar615.util.search.Example;

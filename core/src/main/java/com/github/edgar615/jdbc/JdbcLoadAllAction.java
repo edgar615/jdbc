@@ -1,5 +1,7 @@
 package com.github.edgar615.jdbc;
 
+import com.github.edgar615.entity.Persistent;
+import com.github.edgar615.entity.PersistentKit;
 import com.github.edgar615.util.function.LoadAllAction;
 import com.github.edgar615.util.reflect.ReflectionException;
 import com.github.edgar615.util.search.Example;

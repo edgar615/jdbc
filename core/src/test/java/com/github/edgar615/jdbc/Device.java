@@ -1,6 +1,6 @@
 package com.github.edgar615.jdbc;
 
-import com.github.edgar615.jdbc.Persistent;
+import com.github.edgar615.entity.Persistent;
 import com.google.common.base.MoreObjects;
 import java.util.Date;
 

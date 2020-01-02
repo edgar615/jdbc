@@ -18,57 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDaoImpl extends BaseDaoImpl<Long, User> implements UserDao {
     
-    private static final String LOGIC_DELETE_FIELD = "state";
-
-    private static final String PRIMARY_FIELD = "userId";
-
-    private static final int LOGIC_DELETE_VALUE = 1;
-
-    private static final int LOGIC_NOT_DELETE_VALUE = 0;
-    
     public UserDaoImpl(Jdbc jdbc) {
         super(User.class, jdbc);
-    }
-    
-    @Override
-    public int deleteById(Long id) {
-      User user = new User();
-      user.setState(LOGIC_DELETE_VALUE);
-      return updateById(user, id);
-    }
-
-    @Override
-    public int deleteByExample(Example example) {
-      User user = new User();
-      user.setState(LOGIC_DELETE_VALUE);
-      return updateByExample(user, example);
-    }
-
-    @Override
-    public User findById(Long id, List<String> fields) {
-      Example example = Example.create()
-        .equalsTo(PRIMARY_FIELD, id)
-        .equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE)
-        .addFields(fields);
-      return findFirstByExample(example);
-    }
-
-    @Override
-    public List<User> findByExample(Example example) {
-      example.equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE);
-      return jdbc.findByExample(elementType, example);
-    }
-
-    @Override
-    public List<User> findByExample(Example example, int start, int limit) {
-      example.equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE);
-      return jdbc.findByExample(elementType, example, start, limit);
-    }
-
-    @Override
-    public int countByExample(Example example) {
-      example.equalsTo(LOGIC_DELETE_FIELD, LOGIC_NOT_DELETE_VALUE);
-      return jdbc.countByExample(elementType, example);
     }
     
 
