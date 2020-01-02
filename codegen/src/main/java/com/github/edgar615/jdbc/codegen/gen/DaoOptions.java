@@ -1,7 +1,7 @@
 package com.github.edgar615.jdbc.codegen.gen;
 
+import com.google.common.base.Strings;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,6 +18,7 @@ public class DaoOptions {
   private static final boolean DEFAULT_GEN_IMPL = true;
 
   private String daoPackage = DEFAULT_DAO_PACKAGE;
+  private String daoImplPackage;
 
   private boolean supportSpring = DEFAULT_SUPPORT_SPRING;
 
@@ -32,6 +33,17 @@ public class DaoOptions {
   public DaoOptions setDaoPackage(String daoPackage) {
     this.daoPackage = daoPackage;
     return this;
+  }
+
+  public String getDaoImplPackage() {
+    if (Strings.isNullOrEmpty(daoImplPackage)) {
+      return daoPackage + ".impl";
+    }
+    return daoImplPackage;
+  }
+
+  public void setDaoImplPackage(String daoImplPackage) {
+    this.daoImplPackage = daoImplPackage;
   }
 
   public boolean isSupportSpring() {
