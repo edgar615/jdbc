@@ -1,7 +1,6 @@
 package com.github.edgar615.jdbc.spring.entity;
 
 import com.github.edgar615.entity.PersistentKit;
-import com.github.edgar615.jdbc.PersistentKit;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;
@@ -230,6 +229,4 @@ public class UserKit implements PersistentKit<Long, User> {
 
    /* START Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.*/
 	/* END Do not remove/edit this line. CodeGenerator will preserve any code between start and end tags.*/
-
-
 }

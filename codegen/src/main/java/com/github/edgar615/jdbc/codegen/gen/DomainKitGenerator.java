@@ -38,7 +38,7 @@ public class DomainKitGenerator implements Generator {
     codegen.addImport("java.util.List");
     codegen.addImport("java.util.Map");
     codegen.addImport("com.google.common.collect.Lists");
-    codegen.addImport("com.github.edgar615.jdbc.PersistentKit");
+    codegen.addImport("com.github.edgar615.entity.PersistentKit");
     codegen.genCode(table);
   }
 }
