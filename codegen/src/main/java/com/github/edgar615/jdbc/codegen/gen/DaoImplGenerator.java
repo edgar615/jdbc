@@ -23,7 +23,7 @@ public class DaoImplGenerator implements Generator {
 
   @Override
   public void generate(Table table) {
-    String daoImplPackage = daoOptions.getDaoPackage() + ".impl";
+    String daoImplPackage = daoOptions.getDaoPackage();
     Codegen daoImplGen = new Codegen(codegenOptions.getSrcFolderPath(),
         daoImplPackage, "DaoImpl", tplFile);
     daoImplGen.addVariable("daoPackage", daoOptions.getDaoPackage());
