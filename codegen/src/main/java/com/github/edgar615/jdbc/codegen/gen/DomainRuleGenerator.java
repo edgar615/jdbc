@@ -22,7 +22,7 @@ public class DomainRuleGenerator implements Generator {
         codegenOptions.getDomainPackage(), "Rule", tplFile);
     codegen.addImport("com.google.common.collect.ArrayListMultimap")
         .addImport("com.google.common.collect.Multimap")
-        .addImport("com.github.edgar615.util.validation.Rule");
+        .addImport("com.github.edgar615.validation.rule.Rule");
     codegen.genCode(table);
   }
 }
