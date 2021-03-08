@@ -1,16 +1,17 @@
 package com.github.edgar615.jdbc.spring;
 
+import com.github.edgar615.jdbc.JdbcSqlSupport;
 import com.github.edgar615.entity.Persistent;
-import com.github.edgar615.entity.PersistentKit;
 import com.github.edgar615.util.reflect.ReflectionException;
 import com.github.edgar615.util.search.Example;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.sql.DataSource;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 
 /**
  * Created by Edgar on 2017/8/8.
@@ -84,12 +85,12 @@ public class CachedJdbcOperationImpl implements JdbcOperation {
     if (fields == null || fields.isEmpty()) {
       return result;
     }
-    PersistentKit kit = kit(elementType);
+    JdbcSqlSupport kit = kit(elementType);
     Map<String, Object> map = new HashMap<>();
     kit.toMap(result, map);
     Map<String, Object> newMap = new HashMap<>();
     fields.stream().forEach(f -> newMap.put(f, map.get(f)));
-    Persistent<ID> newResult = Persistent.create(elementType);
+    Persistent<ID> newResult = JdbcSqlSupport.create(elementType);
     kit.fromMap(newMap, newResult);
     return (T) newResult;
   }
@@ -145,9 +146,9 @@ public class CachedJdbcOperationImpl implements JdbcOperation {
     return jdbcOperation.countByExample(elementType, example);
   }
 
-  private <ID, T extends Persistent<ID>> PersistentKit kit(Class<T> elementType) {
+  private <ID, T extends Persistent<ID>> JdbcSqlSupport kit(Class<T> elementType) {
     try {
-      return (PersistentKit) Class.forName(elementType.getName() + "Kit").newInstance();
+      return (JdbcSqlSupport) Class.forName(elementType.getName() + "JdbcSqlSupport").newInstance();
     } catch (Exception e) {
       throw new ReflectionException("create instance failed");
     }

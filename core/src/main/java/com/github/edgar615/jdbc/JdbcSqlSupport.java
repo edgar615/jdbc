@@ -1,11 +1,12 @@
-package com.github.edgar615.entity;
+package com.github.edgar615.jdbc;
 
+import com.github.edgar615.entity.Persistent;
 import com.google.common.collect.Lists;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public interface PersistentKit<ID, T extends Persistent<ID>> {
+public interface JdbcSqlSupport<ID, T extends Persistent<ID>> {
 
   /**
    * 可以通过反射获取到所有的属性，但是因为实体类可以自动生成，所以这个方法也可以自动生成，不再通过反射. 如果要反射，类似的实现如下：
@@ -43,6 +44,18 @@ public interface PersistentKit<ID, T extends Persistent<ID>> {
    */
   void fromMap(Map<String, Object> map, T entity);
 
+  /**
+   * 设置自增主键
+   * @param key 主键
+   */
+  void setGeneratedKey(Number key, T entity);
+
+  /**
+   * 返回主键
+   * @param entity
+   */
+  ID id(T entity);
+
 
   /**
    * 虚拟列，MySQL5.7新增，新增修改是要忽略这个属性.
@@ -70,5 +83,13 @@ public interface PersistentKit<ID, T extends Persistent<ID>> {
       }
     });
     fromMap(newMap, entity);
+  }
+
+  static <ID> Persistent create(Class<? extends Persistent<ID>> clazz) {
+    try {
+      return clazz.newInstance();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }

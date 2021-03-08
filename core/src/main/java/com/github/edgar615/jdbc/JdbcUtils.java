@@ -1,7 +1,6 @@
 package com.github.edgar615.jdbc;
 
 import com.github.edgar615.entity.Persistent;
-import com.github.edgar615.entity.PersistentKit;
 import com.github.edgar615.sql.ClauseBuilder;
 import com.github.edgar615.sql.DeleteBuilder;
 import com.github.edgar615.sql.InsertBuilder;
@@ -87,11 +86,11 @@ public class JdbcUtils {
   public static <ID> SQLBindings findByExample(Class<? extends Persistent<ID>> elementType,
       Example example, boolean onlyPrimaryKey) {
     example = removeUndefinedField(elementType, example);
-    Persistent<ID> domain = Persistent.create(elementType);
+    Persistent<ID> domain = JdbcSqlSupport.create(elementType);
     String selectedField;
     if (onlyPrimaryKey) {
-      PersistentKit kit = createKit(elementType);
-      selectedField = kit.primaryField();
+      JdbcSqlSupport jdbcSqlSupport = createJdbcSqlSupport(elementType);
+      selectedField = jdbcSqlSupport.primaryField();
     } else {
       selectedField = selectFields(domain, example.fields());
     }
@@ -160,7 +159,7 @@ public class JdbcUtils {
     example = removeUndefinedField(elementType, example);
     String countExpr;
     if (example.isDistinct()) {
-      Persistent<ID> domain = Persistent.create(elementType);
+      Persistent<ID> domain = JdbcSqlSupport.create(elementType);
       String selectedField = selectFields(domain, example.fields());
       countExpr = new StringBuilder("count(distinct(").append(selectedField).append("))")
           .toString();
@@ -216,7 +215,7 @@ public class JdbcUtils {
       Map<String, Number> addOrSub,
       List<String> nullFields, ID id) {
     Example example = Example.create()
-        .equalsTo(createKit(persistent.getClass()).primaryField(), id);
+        .equalsTo(createJdbcSqlSupport(persistent.getClass()).primaryField(), id);
     return updateByExample(persistent, addOrSub, nullFields, example);
   }
 
@@ -231,26 +230,26 @@ public class JdbcUtils {
   public static <ID> SQLBindings updateByExample(Persistent<ID> persistent,
       Map<String, Number> addOrSub,
       List<String> nullFields, Example example) {
-    PersistentKit kit = createKit(persistent.getClass());
+    JdbcSqlSupport jdbcSqlSupport = createJdbcSqlSupport(persistent.getClass());
     Map<String, Object> map = new TreeMap<>();
-    kit.toMap(persistent, map);
+    jdbcSqlSupport.toMap(persistent, map);
     boolean noUpdated = map.values().stream()
         .allMatch(v -> v == null);
     boolean noAddOrSub = addOrSub == null
-        || addOrSub.keySet().stream().allMatch(v -> !kit.fields().contains(v));
+        || addOrSub.keySet().stream().allMatch(v -> !jdbcSqlSupport.fields().contains(v));
     boolean noNull = nullFields == null
-        || nullFields.stream().allMatch(v -> !kit.fields().contains(v));
+        || nullFields.stream().allMatch(v -> !jdbcSqlSupport.fields().contains(v));
     if (noUpdated && noAddOrSub && noNull) {
       return null;
     }
 
     //对example做一次清洗，将表中不存在的条件删除，避免频繁出现500错误
-    example = example.removeUndefinedField(kit.fields());
+    example = example.removeUndefinedField(jdbcSqlSupport.fields());
 
     String tableName = StringUtils.underscoreName(persistent.getClass().getSimpleName());
     UpdateBuilder updateBuilder = UpdateBuilder.create(tableName);
     //忽略虚拟列
-    List<String> virtualFields = kit.virtualFields();
+    List<String> virtualFields = jdbcSqlSupport.virtualFields();
 
     map.forEach((k, v) -> {
       if (v != null && !virtualFields.contains(k)) {
@@ -261,7 +260,7 @@ public class JdbcUtils {
     if (addOrSub != null) {
       for (Map.Entry<String, Number> entry : addOrSub.entrySet()) {
         String key = entry.getKey();
-        if (kit.fields().contains(key)) {
+        if (jdbcSqlSupport.fields().contains(key)) {
           String underscoreKey = StringUtils.underscoreName(key);
           BigDecimal value = new BigDecimal(entry.getValue().toString());
           if (value.compareTo(new BigDecimal(0)) > 0) {
@@ -275,7 +274,7 @@ public class JdbcUtils {
     }
     if (nullFields != null) {
       nullFields.stream()
-          .filter(f -> kit.fields().contains(f))
+          .filter(f -> jdbcSqlSupport.fields().contains(f))
           .forEach(f -> updateBuilder.setExpr(StringUtils.underscoreName(f), "null"));
     }
     appendWhere(updateBuilder, example.criteria());
@@ -293,10 +292,10 @@ public class JdbcUtils {
   public static <ID> SQLBindings insert(Persistent<ID> persistent) {
     String tableName = underscoreName(persistent.getClass().getSimpleName());
     InsertBuilder insertBuilder = InsertBuilder.create(tableName);
-    PersistentKit kit = createKit(persistent.getClass());
+    JdbcSqlSupport jdbcSqlSupport = createJdbcSqlSupport(persistent.getClass());
     Map<String, Object> map = new TreeMap<>();
-    kit.toMap(persistent, map);
-    List<String> virtualFields = kit.virtualFields();
+    jdbcSqlSupport.toMap(persistent, map);
+    List<String> virtualFields = jdbcSqlSupport.virtualFields();
     map.forEach((k, v) -> {
       if (v != null && !virtualFields.contains(k)) {
         insertBuilder.set(underscoreName(k), v);
@@ -315,11 +314,11 @@ public class JdbcUtils {
   public static <ID> SQLBindings fullInsertSql(Persistent<ID> persistent) {
     String tableName = underscoreName(persistent.getClass().getSimpleName());
     InsertBuilder insertBuilder = InsertBuilder.create(tableName);
-    PersistentKit kit = createKit(persistent.getClass());
+    JdbcSqlSupport jdbcSqlSupport = createJdbcSqlSupport(persistent.getClass());
     Map<String, Object> map = new HashMap<>();
-    kit.toMap(persistent, map);
-    List<String> virtualFields = kit.virtualFields();
-    List<String> fields = kit.fields();
+    jdbcSqlSupport.toMap(persistent, map);
+    List<String> virtualFields = jdbcSqlSupport.virtualFields();
+    List<String> fields = jdbcSqlSupport.fields();
     fields.stream()
         .forEach(f -> {
           if (!virtualFields.contains(f)) {
@@ -331,10 +330,10 @@ public class JdbcUtils {
 
   private static <ID> String selectFields(Persistent<ID> persistent, List<String> fields) {
     String selectedField;
-    PersistentKit kit = createKit(persistent.getClass());
+    JdbcSqlSupport jdbcSqlSupport = createJdbcSqlSupport(persistent.getClass());
     Map<String, Object> map = new HashMap<>();
-    kit.toMap(persistent, map);
-    List<String> domainFields = kit.fields();
+    jdbcSqlSupport.toMap(persistent, map);
+    List<String> domainFields = jdbcSqlSupport.fields();
     if (fields.isEmpty()) {
       selectedField = Joiner.on(", ")
           .join(domainFields.stream()
@@ -352,7 +351,7 @@ public class JdbcUtils {
 
   private static <ID> Example primaryKeyExample(Class<? extends Persistent<ID>> elementType,
       ID id) {
-    return Example.create().equalsTo(createKit(elementType).primaryField(), id);
+    return Example.create().equalsTo(createJdbcSqlSupport(elementType).primaryField(), id);
   }
 
   private static void appendWhere(ClauseBuilder sqlBuilder, List<Criterion> criteria) {
@@ -364,7 +363,7 @@ public class JdbcUtils {
   private static <ID, T extends Persistent<ID>> Example removeUndefinedField(Class<T> elementType,
       Example example) {
     //对example做一次清洗，将表中不存在的条件删除，避免频繁出现500错误
-    example = example.removeUndefinedField(createKit(elementType).fields());
+    example = example.removeUndefinedField(createJdbcSqlSupport(elementType).fields());
     return example;
   }
 
@@ -408,9 +407,9 @@ public class JdbcUtils {
     return StringUtils.underscoreName(name);
   }
 
-  private static PersistentKit createKit(Class<? extends Persistent> clazz) {
+  private static JdbcSqlSupport createJdbcSqlSupport(Class<? extends Persistent> clazz) {
     try {
-      return (PersistentKit) Class.forName(clazz.getName() + "Kit").newInstance();
+      return (JdbcSqlSupport) Class.forName(clazz.getName() + "JdbcSqlSupport").newInstance();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

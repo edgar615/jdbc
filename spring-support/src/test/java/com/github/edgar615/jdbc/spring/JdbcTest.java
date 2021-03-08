@@ -1,6 +1,7 @@
 package com.github.edgar615.jdbc.spring;
 
 import com.github.edgar615.jdbc.Jdbc;
+import com.github.edgar615.jdbc.spring.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,16 @@ public class JdbcTest {
 
   @Test
   public void testFindFirst() {
-    Device device = jdbc.findById(Device.class, 1);
+    User device = jdbc.findById(User.class, 1L);
     System.out.println(device);
 
-    device = jdbc.findById(Device.class, 1);
+    device = jdbc.findById(User.class, 1L);
     System.out.println(device);
 
-    device = new Device();
-    device.setBarcode("1");
-    jdbc.updateById(device, 1);
+    device = new User();
+    device.setNickname("1");
+    jdbc.updateById(device, 1L);
 
-    jdbc.findById(Device.class, 1);
+    jdbc.findById(User.class, 1L);
   }
 }

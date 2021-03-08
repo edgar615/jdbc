@@ -3,23 +3,23 @@ package com.github.edgar615.jdbc.codegen.gen;
 import com.github.edgar615.jdbc.codegen.db.ParameterType;
 import com.github.edgar615.jdbc.codegen.db.Table;
 
-public class DomainKitGenerator implements Generator {
+public class SqlSupportGenerator implements Generator {
 
   private final CodegenOptions codegenOptions;
 
-  private static final String tplFile = "tpl/domainKit.hbs";
+  private static final String tplFile = "tpl/sqlSupport.hbs";
 
-  public DomainKitGenerator(CodegenOptions codegenOptions) {
+  public SqlSupportGenerator(CodegenOptions codegenOptions) {
     this.codegenOptions = codegenOptions;
   }
 
-  public static DomainKitGenerator create(CodegenOptions codegenOptions) {
-    return new DomainKitGenerator(codegenOptions);
+  public static SqlSupportGenerator create(CodegenOptions codegenOptions) {
+    return new SqlSupportGenerator(codegenOptions);
   }
 
   @Override
   public void generate(Table table) {
-    Codegen codegen = new Codegen(codegenOptions.getSrcFolderPath(), codegenOptions.getDomainPackage(), "Kit",
+    Codegen codegen = new Codegen(codegenOptions.getSrcFolderPath(), codegenOptions.getDomainPackage(), "JdbcSqlSupport",
         tplFile);
     table.getColumns().stream()
         .filter(c -> !c.isIgnore())
@@ -38,7 +38,7 @@ public class DomainKitGenerator implements Generator {
     codegen.addImport("java.util.List");
     codegen.addImport("java.util.Map");
     codegen.addImport("com.google.common.collect.Lists");
-    codegen.addImport("com.github.edgar615.entity.PersistentKit");
+    codegen.addImport("com.github.edgar615.jdbc.JdbcSqlSupport");
     codegen.genCode(table);
   }
 }

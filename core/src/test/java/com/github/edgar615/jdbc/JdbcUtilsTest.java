@@ -8,13 +8,14 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Created by Edgar on 2017/5/18.
@@ -289,7 +290,7 @@ public class JdbcUtilsTest {
   }
 
   private String allColumn() {
-    List<String> fields = new DeviceKit().fields()
+    List<String> fields = new DeviceJdbcSqlSupport().fields()
         .stream().map(f -> StringUtils.underscoreName(f))
         .collect(Collectors.toList());
     return Joiner.on(", ").join(fields);

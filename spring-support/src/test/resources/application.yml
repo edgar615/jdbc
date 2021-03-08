@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/device
+    url: jdbc:mysql://192.168.159.131:3306/ds0
     username : root
     password: 123456
     connectionTimeout: 60000 #连接的超时时间，毫秒
@@ -27,7 +27,7 @@ caching:
 
 jdbc:
   caching:
-    enabled: true
+    enabled: false
 #    defaultCacheTables:
 #      - Device
     config:

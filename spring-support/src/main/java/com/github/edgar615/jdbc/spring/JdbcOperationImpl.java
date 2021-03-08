@@ -1,24 +1,25 @@
 package com.github.edgar615.jdbc.spring;
 
-import com.github.edgar615.jdbc.JdbcUtils;
+import com.github.edgar615.jdbc.JdbcSqlSupport;
 import com.github.edgar615.entity.Persistent;
-import com.github.edgar615.entity.PersistentKit;
+import com.github.edgar615.jdbc.JdbcUtils;
 import com.github.edgar615.sql.SQLBindings;
 import com.github.edgar615.util.base.StringUtils;
 import com.github.edgar615.util.reflect.ReflectionException;
 import com.github.edgar615.util.search.Example;
 import com.google.common.collect.Lists;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.sql.DataSource;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 /**
  * Created by Edgar on 2017/8/8.
@@ -42,26 +43,28 @@ public class JdbcOperationImpl implements JdbcOperation {
 
   @Override
   public <ID> ID insertAndGeneratedKey(Persistent<ID> persistent) {
-    if (persistent.id() != null) {
-      insert(persistent);
-      return persistent.id();
-    }
-    PersistentKit kit = null;
+    JdbcSqlSupport jdbcSqlSupport = null;
     try {
-       kit = (PersistentKit) Class.forName(persistent.getClass().getName() + "Kit").newInstance();
+      jdbcSqlSupport = (JdbcSqlSupport) Class.forName(persistent.getClass().getName() + "JdbcSqlSupport").newInstance();
     } catch (Exception e) {
       throw new ReflectionException("create instance failed");
     }
+
+    if (jdbcSqlSupport.id(persistent) != null) {
+      insert(persistent);
+      return (ID) jdbcSqlSupport.id(persistent);
+    }
+
     SQLBindings sqlBindings = JdbcUtils.insert(persistent);
     JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
     KeyHolder keyHolder = new GeneratedKeyHolder();
-    PersistentKit finalKit = kit;
+    JdbcSqlSupport finalJdbcSqlSupport = jdbcSqlSupport;
     jdbcTemplate.update(
         connection -> {
           PreparedStatement ps
               = connection.prepareStatement(sqlBindings.sql(),
               new String[]{StringUtils.underscoreName(
-                  finalKit.primaryField())}
+                  finalJdbcSqlSupport.primaryField())}
           );
           int i = 1;
           for (Object arg : sqlBindings.bindings()) {
@@ -70,8 +73,8 @@ public class JdbcOperationImpl implements JdbcOperation {
           return ps;
         },
         keyHolder);
-    persistent.setGeneratedKey(keyHolder.getKey());
-    return persistent.id();
+    jdbcSqlSupport.setGeneratedKey(keyHolder.getKey(), persistent);
+    return (ID) jdbcSqlSupport.id(persistent);
   }
 
   @Override

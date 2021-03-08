@@ -1,7 +1,6 @@
 package com.github.edgar615.jdbc;
 
 import com.github.edgar615.entity.Persistent;
-import com.github.edgar615.entity.PersistentKit;
 import com.github.edgar615.util.function.LoadAllAction;
 import com.github.edgar615.util.reflect.ReflectionException;
 import com.github.edgar615.util.search.Example;
@@ -27,7 +26,7 @@ public class JdbcLoadAllAction<ID, T extends Persistent<ID>> implements LoadAllA
 
   private final Consumer<List<T>> consumer;
 
-  private PersistentKit<ID, T> kit;
+  private JdbcSqlSupport<ID, T> jdbcSqlSupport;
 
   private JdbcLoadAllAction(Jdbc jdbc, Class<T> elementType, Example example, int limit,
       Consumer<List<T>> consumer) {
@@ -38,7 +37,7 @@ public class JdbcLoadAllAction<ID, T extends Persistent<ID>> implements LoadAllA
     this.jdbc = jdbc;
     this.elementType = elementType;
     try {
-      this.kit = (PersistentKit<ID, T>) Class.forName(elementType.getName() + "Kit").newInstance();
+      this.jdbcSqlSupport = (JdbcSqlSupport<ID, T>) Class.forName(elementType.getName() + "JdbcSqlSupport").newInstance();
     } catch (Exception e) {
       throw new ReflectionException("class not found");
     }
@@ -102,17 +101,16 @@ public class JdbcLoadAllAction<ID, T extends Persistent<ID>> implements LoadAllA
     Example newExample = Example.create();
     newExample.addCriteria(example.criteria());
     newExample.addFields(example.fields());
-    Persistent persistent = newDomain(elementType);
     if (startPk != null) {
-      newExample.greaterThan(kit.primaryField(), startPk);
+      newExample.greaterThan(jdbcSqlSupport.primaryField(), startPk);
     }
-    newExample.asc(kit.primaryField());
+    newExample.asc(jdbcSqlSupport.primaryField());
     List<T> elements = jdbc.findByExample(elementType, newExample, 0, limit);
     if (elements == null || elements.isEmpty()) {
       return;
     }
     consumer.accept(elements);
-    ID lastPk = elements.get(elements.size() - 1).id();
+    ID lastPk = jdbcSqlSupport.id(elements.get(elements.size() - 1));
     load(lastPk);
   }
 

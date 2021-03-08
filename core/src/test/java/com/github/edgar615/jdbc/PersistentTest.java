@@ -13,7 +13,7 @@ public class PersistentTest {
 
   @Test
   public void testPrimaryKey() {
-    String primaryKey = new DeviceKit().primaryField();
+    String primaryKey = new DeviceJdbcSqlSupport().primaryField();
     Assert.assertEquals("deviceId", primaryKey);
   }
 

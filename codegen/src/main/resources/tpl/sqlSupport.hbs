@@ -9,14 +9,11 @@ package {{package}};
 *
 * @author Jdbc Code Generator
 */
-public class {{table.upperCamelName}}Kit implements PersistentKit<{{table.pkType.name}}, {{table.upperCamelName}}> {
+public class {{table.upperCamelName}}JdbcSqlSupport implements JdbcSqlSupport<{{table.pkType.name}}, {{table.upperCamelName}}> {
 
     private static final long serialVersionUID = 1L;
     {{#table.columns}}{{#if ignore}}{{else}}
-    public static final String DB_{{upperUnderScoreName}} = "{{name}}";
-    {{/if}}{{/table.columns}}
-    {{#table.columns}}{{#if ignore}}{{else}}
-    public static final String {{upperUnderScoreName}} = "{{lowerCamelName}}";
+    public static final String {{upperUnderScoreName}} = {{table.upperCamelName}}Column.{{upperUnderScoreName}}.javaName();
     {{/if}}{{/table.columns}}
     @Override
     public List<String> fields() {
@@ -57,5 +54,26 @@ public class {{table.upperCamelName}}Kit implements PersistentKit<{{table.pkType
         {{/if}}{{/table.columns}}
     }
 
+    @Override
+    public void setGeneratedKey(Number key, {{table.upperCamelName}} {{table.lowerCamelName}}) {
+    {{#eq table.pkType.name "Integer"}}
+        {{table.lowerCamelName}}.set{{toUpperCamelName table.pk}}(key.intValue());
+    {{else eq table.pkType.name "Long"}}
+        {{table.lowerCamelName}}.set{{toUpperCamelName table.pk}}(key.longValue());
+    {{else}}
+        throw new UnsupportedOperationException();
+    {{/eq}}
+    }
+
+    @Override
+    public {{table.pkType.name}} id ({{table.upperCamelName}} {{table.lowerCamelName}}) {
+        return {{table.lowerCamelName}}.get{{toUpperCamelName table.pk}}();
+    }
+
+    public static class {{table.upperCamelName}}Column {
+    {{#table.columns}}{{#if ignore}}{{else}}
+        public static final SqlColumn {{upperUnderScoreName}} = SqlColumn.create("{{name}}", "{{lowerCamelName}}");
+    {{/if}}{{/table.columns}}
+    }
    {{safestr userSource}}
 }

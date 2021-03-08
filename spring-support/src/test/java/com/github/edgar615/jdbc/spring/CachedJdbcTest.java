@@ -1,6 +1,7 @@
 package com.github.edgar615.jdbc.spring;
 
 import com.github.edgar615.jdbc.Jdbc;
+import com.github.edgar615.jdbc.spring.entity.User;
 import com.github.edgar615.util.search.Example;
 import com.google.common.collect.Lists;
 import org.junit.Test;
@@ -18,75 +19,73 @@ public class CachedJdbcTest {
 
   @Test
   public void testFindFirst() {
-    Device device = jdbc.findById(Device.class, 3);
-    System.out.println(device);
+    User user = jdbc.findById(User.class, 3L);
+    System.out.println(user);
 
-    device = jdbc.findById(Device.class, 3);
-    System.out.println(device);
+    user = jdbc.findById(User.class, 3L);
+    System.out.println(user);
 
-    device = new Device();
-    device.setBarcode("3");
-    jdbc.updateById(device, 3);
+    user = new User();
+    user.setNickname("3");
+    jdbc.updateById(user, 3L);
 
-    jdbc.findById(Device.class, 3);
+    jdbc.findById(User.class, 3L);
   }
 
   @Test
   public void testField() {
-    Device device = jdbc.findById(Device.class, 3);
-    System.out.println(device);
+    User user = jdbc.findById(User.class, 3L);
+    System.out.println(user);
 
-    device = jdbc.findById(Device.class, 3, Lists.newArrayList("deviceId"));
-    System.out.println(device);
+    user = jdbc.findById(User.class, 3L, Lists.newArrayList("userId"));
+    System.out.println(user);
 
-    device = new Device();
-    device.setBarcode("3");
+    user = new User();
+    user.setNickname("3");
     Example example = Example.create()
-        .equalsTo("deviceId", 1);
-    jdbc.updateByExample(device, example);
+        .equalsTo("userId", 1L);
+    jdbc.updateByExample(user, example);
 
-    jdbc.findById(Device.class, 3);
+    jdbc.findById(User.class, 3L);
   }
 
   @Test
   public void testInsert() {
-    Device device = jdbc.findById(Device.class, 1);
-    System.out.println(device);
+    User user = jdbc.findById(User.class, 1L);
+    System.out.println(user);
 
-    device = jdbc.findById(Device.class, 1);
-    System.out.println(device);
+    user = jdbc.findById(User.class, 1L);
+    System.out.println(user);
 
-    device = new Device();
-    device.setDeviceId(1);
-    device.setCompanyCode(0);
-    device.setBarcode("0");
-    device.setEncryptKey("000000000000000");
-    jdbc.insert(device);
+    user = new User();
+    user.setUsername("0");
+    user.setNickname("000000000000000");
+    jdbc.insert(user);
 
-    device = jdbc.findById(Device.class, 1);
-    System.out.println(device);
+    user = jdbc.findById(User.class, 1L);
+    System.out.println(user);
 
-    device.setDeviceId(2);
-    jdbc.batchInsert(Lists.newArrayList(device));;
-    device = jdbc.findById(Device.class, 2);
-    System.out.println(device);
-    device = jdbc.findById(Device.class, 2);
-    System.out.println(device);
+    user.setUserId(2L);
+    jdbc.batchInsert(Lists.newArrayList(user));;
+    user = jdbc.findById(User.class, 2L);
+    System.out.println(user);
+    user = jdbc.findById(User.class, 2L);
+    System.out.println(user);
 
   }
 
   @Test
   public void testDelete() {
-    Device device = jdbc.findById(Device.class, 1);
-    System.out.println(device);
+    User user = jdbc.findById(User.class, 1L);
+    System.out.println(user);
 
-    device = jdbc.findById(Device.class, 1);
-    System.out.println(device);
+    user = jdbc.findById(User.class, 1L);
+    System.out.println(user);
 
-    jdbc.deleteById(Device.class, 1);
+    jdbc.deleteById(User.class, 1L);
 
-    device = jdbc.findById(Device.class, 1);
-    System.out.println(device);
+    user = jdbc.findById(User.class, 1L);
+    System.out.println(user);
   }
 
 }

@@ -217,21 +217,6 @@ public class Device implements Persistent<Integer> {
         .toString();
   }
 
-  @Override
-  public Integer id() {
-    return deviceId;
-  }
-
-  @Override
-  public void setId(Integer id) {
-    this.deviceId = id;
-  }
-
-  @Override
-  public void setGeneratedKey(Number key) {
-    this.deviceId = key.intValue();
-  }
-
   public Integer getDeviceId() {
     return deviceId;
   }

@@ -4,8 +4,6 @@ import com.github.edgar615.dao.BaseDaoImpl;
 import com.github.edgar615.jdbc.Jdbc;
 import com.github.edgar615.jdbc.spring.dao.UserDao;
 import com.github.edgar615.jdbc.spring.entity.User;
-import com.github.edgar615.util.search.Example;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,6 +1,5 @@
 package com.github.edgar615.jdbc;
 
-import com.github.edgar615.entity.PersistentKit;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,7 @@ import java.util.Map;
  *
  * @author Jdbc Code Generator Date
  */
-public class DeviceKit implements PersistentKit<Integer, Device> {
+public class DeviceJdbcSqlSupport implements JdbcSqlSupport<Integer, Device> {
 
 
   @Override
@@ -65,6 +64,16 @@ public class DeviceKit implements PersistentKit<Integer, Device> {
   @Override
   public void fromMap(Map<String, Object> map, Device entity) {
 
+  }
+
+  @Override
+  public void setGeneratedKey(Number key, Device entity) {
+    entity.setDeviceId(key.intValue());
+  }
+
+  @Override
+  public Integer id(Device entity) {
+    return entity.getDeviceId();
   }
 
 

@@ -4,7 +4,7 @@ import com.github.edgar615.jdbc.codegen.db.Column;
 import com.github.jknack.handlebars.Options;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -83,48 +83,4 @@ public class HelperSource {
     return "\t\t";
   }
 
-  public CharSequence mapperXmlAllField(Object v1, Options options) throws IOException {
-    if (v1 == null) {
-      return options.inverse(this);
-    }
-    List<Column> columns = (List<Column>) v1;
-    List<String> fields = columns.stream()
-        .filter(c -> !c.isIgnore())
-        .map(c -> c.getName())
-        .collect(Collectors.toList());
-    return Joiner.on(",").join(fields);
-  }
-
-  public CharSequence mapperXmlUpdateValue(Object v1, Options options) throws IOException {
-    if (v1 == null) {
-      return options.inverse(this);
-    }
-    Column column = (Column) v1;
-    return " #{persistent." + column.getLowerCamelName() + "}";
-  }
-
-
-  public CharSequence mapperXmlInsertValues(Object v1, Options options) throws IOException {
-    if (v1 == null) {
-      return options.inverse(this);
-    }
-    List<Column> columns = (List<Column>) v1;
-    List<String> fields = columns.stream()
-        .filter(c -> !c.isIgnore())
-        .map(c -> c.getLowerCamelName())
-        .map(s -> "#{" + s + "}")
-        .collect(Collectors.toList());
-    return Joiner.on(",").join(fields);
-  }
-
-  public CharSequence mapperXmlSelectField(Object v1, Options options) throws IOException {
-    if (v1 == null) {
-      return options.inverse(this);
-    }
-    List<String> columns = (List<String>) v1;
-    if (columns == null || columns.isEmpty()) {
-      return "*";
-    }
-    return Joiner.on(",").join(columns);
-  }
 }
